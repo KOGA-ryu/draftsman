@@ -9,7 +9,7 @@ COLOR = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate a Draftsman three-color UI theme.")
+    parser = argparse.ArgumentParser(description="Validate a Draftsman four-color UI theme.")
     parser.add_argument("path", help="Path to ui_theme.json")
     args = parser.parse_args()
 
@@ -27,12 +27,12 @@ def main():
     if not isinstance(data, dict):
         errors.append("root must be an object")
     else:
-        for key in ("base", "surface", "accent"):
+        for key in ("base", "surface", "accent", "text"):
             value = data.get(key)
             if not isinstance(value, str) or not COLOR.match(value):
                 errors.append(f"{key} must be a #RRGGBB color")
         for key in data:
-            if key not in ("base", "surface", "accent"):
+            if key not in ("base", "surface", "accent", "text"):
                 errors.append(f"{key} is not a supported theme field")
 
     if errors:

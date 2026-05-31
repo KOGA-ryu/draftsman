@@ -33,7 +33,9 @@ private:
     QLineEdit *base_ = nullptr;
     QLineEdit *surface_ = nullptr;
     QLineEdit *accent_ = nullptr;
+    QLineEdit *text_ = nullptr;
     QPushButton *baseSwatch_ = nullptr;
     QPushButton *surfaceSwatch_ = nullptr;
     QPushButton *accentSwatch_ = nullptr;
+    QPushButton *textSwatch_ = nullptr;
 };

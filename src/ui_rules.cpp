@@ -58,11 +58,8 @@ QColor accent() {
     return colorFrom(g_theme.accent, defaultUiTheme().accent);
 }
 
-QColor textOn(const QColor &background) {
-    if (luminance(background) < 0.35) {
-        return blend(QColor("#e9eee9"), accent(), 0.08);
-    }
-    return blend(QColor("#11161a"), accent(), 0.06);
+QColor textColor() {
+    return colorFrom(g_theme.text, defaultUiTheme().text);
 }
 
 } // namespace
@@ -72,6 +69,7 @@ void set_active_theme(const UiTheme &theme) {
     g_theme.base = normalizedColor(g_theme.base, defaultUiTheme().base);
     g_theme.surface = normalizedColor(g_theme.surface, defaultUiTheme().surface);
     g_theme.accent = normalizedColor(g_theme.accent, defaultUiTheme().accent);
+    g_theme.text = normalizedColor(g_theme.text, defaultUiTheme().text);
 }
 
 UiTheme active_theme() {
@@ -86,8 +84,8 @@ QString colors::bg_center() { return hex(blend(base(), surface(), 0.32)); }
 QString colors::bg_context() { return hex(blend(base(), surface(), 0.24)); }
 QString colors::bg_section() { return hex(surface()); }
 QString colors::border_soft() { return hex(blend(surface(), accent(), 0.35)); }
-QString colors::text_primary() { return hex(textOn(surface())); }
-QString colors::text_muted() { return hex(blend(textOn(surface()), surface(), 0.38)); }
+QString colors::text_primary() { return hex(textColor()); }
+QString colors::text_muted() { return hex(blend(textColor(), surface(), 0.38)); }
 QString colors::selected_bg() { return hex(blend(surface(), accent(), 0.18)); }
 QString colors::hover_bg() { return hex(blend(surface(), accent(), 0.12)); }
 QString colors::risk_normal() { return hex(blend(surface(), accent(), 0.20)); }
@@ -97,12 +95,12 @@ QString colors::risk_generated() { return hex(blend(surface(), shiftedHue(accent
 QString colors::risk_inspect_first() { return hex(blend(surface(), shiftedHue(accent(), 65), 0.20)); }
 QString colors::toolbar_bg() { return hex(blend(base(), surface(), 0.22)); }
 QString colors::border_strong() { return hex(blend(surface(), accent(), 0.62)); }
-QString colors::primary_action_bg() { return hex(blend(accent(), textOn(surface()), luminance(surface()) < 0.42 ? 0.10 : 0.28)); }
-QString colors::primary_action_text() { return hex(textOn(colorFrom(colors::primary_action_bg(), "#222222"))); }
-QString colors::primary_action_hover() { return hex(blend(colorFrom(colors::primary_action_bg(), "#222222"), textOn(surface()), 0.16)); }
+QString colors::primary_action_bg() { return hex(blend(accent(), textColor(), luminance(surface()) < 0.42 ? 0.10 : 0.28)); }
+QString colors::primary_action_text() { return hex(textColor()); }
+QString colors::primary_action_hover() { return hex(blend(colorFrom(colors::primary_action_bg(), "#222222"), textColor(), 0.16)); }
 QString colors::tab_hover_bg() { return QString("rgba(%1, %2, %3, 0.35)").arg(accent().red()).arg(accent().green()).arg(accent().blue()); }
-QString colors::risk_text() { return hex(blend(textOn(surface()), shiftedHue(accent(), 95), 0.34)); }
-QString colors::good_text() { return hex(blend(textOn(surface()), accent(), 0.30)); }
+QString colors::risk_text() { return hex(blend(textColor(), shiftedHue(accent(), 95), 0.34)); }
+QString colors::good_text() { return hex(blend(textColor(), accent(), 0.30)); }
 
 QString app_font_family() {
     const QStringList installedFamilies = QFontDatabase::families();

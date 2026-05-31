@@ -4,17 +4,18 @@ Draftsman is meant to be filled by agents without changing C++.
 
 Use `data/shell_layout.json` for the visible blank-shell structure and light repo knowledge. Use `data/projects.json` for project registry facts. Keep generated or experimental source material outside the final blank unless the human asks to promote it.
 
-Use `data/ui_theme.json` for the global three-color UI palette:
+Use `data/ui_theme.json` for the global four-color UI palette:
 
 ```json
 {
   "base": "#141719",
   "surface": "#24282c",
-  "accent": "#7fa8b8"
+  "accent": "#7fa8b8",
+  "text": "#e9eee9"
 }
 ```
 
-Do not hard-code project colors into C++ or stylesheet files. Change the three theme colors and let the stylesheet derive the rest.
+Do not hard-code project colors into C++ or stylesheet files. Change the four theme colors and let the stylesheet derive the rest.
 
 ## Shell Layout
 

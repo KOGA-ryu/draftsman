@@ -41,6 +41,7 @@ UiTheme parseUiThemeDocument(const QJsonDocument &document) {
     theme.base = normalizedColor(readString(root, "base", theme.base), theme.base);
     theme.surface = normalizedColor(readString(root, "surface", theme.surface), theme.surface);
     theme.accent = normalizedColor(readString(root, "accent", theme.accent), theme.accent);
+    theme.text = normalizedColor(readString(root, "text", theme.text), theme.text);
     theme.loaded = true;
     return theme;
 }
@@ -71,6 +72,7 @@ QJsonObject uiThemeToJson(const UiTheme &theme) {
         {"base", normalizedColor(theme.base, defaultUiTheme().base)},
         {"surface", normalizedColor(theme.surface, defaultUiTheme().surface)},
         {"accent", normalizedColor(theme.accent, defaultUiTheme().accent)},
+        {"text", normalizedColor(theme.text, defaultUiTheme().text)},
     };
 }
 

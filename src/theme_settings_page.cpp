@@ -65,9 +65,11 @@ ThemeSettingsPage::ThemeSettingsPage(
     base_ = new QLineEdit(dex_ui::normalizedColor(theme_.base, dex_ui::defaultUiTheme().base));
     surface_ = new QLineEdit(dex_ui::normalizedColor(theme_.surface, dex_ui::defaultUiTheme().surface));
     accent_ = new QLineEdit(dex_ui::normalizedColor(theme_.accent, dex_ui::defaultUiTheme().accent));
+    text_ = new QLineEdit(dex_ui::normalizedColor(theme_.text, dex_ui::defaultUiTheme().text));
     baseSwatch_ = makeSwatch("Choose base/background color");
     surfaceSwatch_ = makeSwatch("Choose surface/panel color");
     accentSwatch_ = makeSwatch("Choose accent/selection color");
+    textSwatch_ = makeSwatch("Choose font/text color");
 
     auto *form = new QFormLayout;
     form->setContentsMargins(0, 4, 0, 0);
@@ -75,6 +77,7 @@ ThemeSettingsPage::ThemeSettingsPage(
     form->addRow("Base", makeColorRow(base_, baseSwatch_));
     form->addRow("Surface", makeColorRow(surface_, surfaceSwatch_));
     form->addRow("Accent", makeColorRow(accent_, accentSwatch_));
+    form->addRow("Text", makeColorRow(text_, textSwatch_));
     sectionLayout->addLayout(form);
     outer->addWidget(section);
 
@@ -104,9 +107,11 @@ ThemeSettingsPage::ThemeSettingsPage(
     connect(baseSwatch_, &QPushButton::clicked, this, [this]() { chooseColor(base_); });
     connect(surfaceSwatch_, &QPushButton::clicked, this, [this]() { chooseColor(surface_); });
     connect(accentSwatch_, &QPushButton::clicked, this, [this]() { chooseColor(accent_); });
+    connect(textSwatch_, &QPushButton::clicked, this, [this]() { chooseColor(text_); });
     connect(base_, &QLineEdit::textChanged, this, [this]() { refreshSwatches(); });
     connect(surface_, &QLineEdit::textChanged, this, [this]() { refreshSwatches(); });
     connect(accent_, &QLineEdit::textChanged, this, [this]() { refreshSwatches(); });
+    connect(text_, &QLineEdit::textChanged, this, [this]() { refreshSwatches(); });
     refreshSwatches();
 }
 
@@ -122,6 +127,7 @@ void ThemeSettingsPage::refreshSwatches() {
     setSwatch(baseSwatch_, base_->text());
     setSwatch(surfaceSwatch_, surface_->text());
     setSwatch(accentSwatch_, accent_->text());
+    setSwatch(textSwatch_, text_->text());
 }
 
 dex_ui::UiTheme ThemeSettingsPage::collectTheme() const {
@@ -131,6 +137,7 @@ dex_ui::UiTheme ThemeSettingsPage::collectTheme() const {
     next.base = dex_ui::normalizedColor(base_->text(), dex_ui::defaultUiTheme().base);
     next.surface = dex_ui::normalizedColor(surface_->text(), dex_ui::defaultUiTheme().surface);
     next.accent = dex_ui::normalizedColor(accent_->text(), dex_ui::defaultUiTheme().accent);
+    next.text = dex_ui::normalizedColor(text_->text(), dex_ui::defaultUiTheme().text);
     return next;
 }
 

@@ -14,6 +14,7 @@ struct UiTheme {
     QString base = "#141719";
     QString surface = "#24282c";
     QString accent = "#7fa8b8";
+    QString text = "#e9eee9";
 };
 
 UiTheme defaultUiTheme();

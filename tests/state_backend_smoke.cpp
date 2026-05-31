@@ -154,7 +154,7 @@ private slots:
         QVERIFY(!DraftsmanShell::enabledInspectorPanels(layout, "Overview", "Dashboard").isEmpty());
     }
 
-    void productionUiThemeUsesThreeEditableColors() {
+    void productionUiThemeUsesEditableColors() {
         const QString path = QString::fromUtf8(DRAFTSMAN_SOURCE_DIR) + "/data/ui_theme.json";
         const dex_ui::UiTheme theme = dex_ui::loadUiThemeFile(path);
 
@@ -162,11 +162,13 @@ private slots:
         QVERIFY(dex_ui::isValidColor(theme.base));
         QVERIFY(dex_ui::isValidColor(theme.surface));
         QVERIFY(dex_ui::isValidColor(theme.accent));
+        QVERIFY(dex_ui::isValidColor(theme.text));
         const QJsonObject serialized = dex_ui::uiThemeToJson(theme);
-        QCOMPARE(serialized.keys().size(), 3);
+        QCOMPARE(serialized.keys().size(), 4);
         QVERIFY(serialized.contains("base"));
         QVERIFY(serialized.contains("surface"));
         QVERIFY(serialized.contains("accent"));
+        QVERIFY(serialized.contains("text"));
     }
 
     void shellLayoutParsesAgentEditableLines() {

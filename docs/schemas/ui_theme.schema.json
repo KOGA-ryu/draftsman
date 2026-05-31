@@ -3,7 +3,7 @@
   "$id": "https://draftsman.local/ui_theme.schema.json",
   "title": "Draftsman UI Theme",
   "type": "object",
-  "required": ["base", "surface", "accent"],
+  "required": ["base", "surface", "accent", "text"],
   "additionalProperties": false,
   "properties": {
     "base": {
@@ -15,6 +15,10 @@
       "pattern": "^#[0-9a-fA-F]{6}$"
     },
     "accent": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "text": {
       "type": "string",
       "pattern": "^#[0-9a-fA-F]{6}$"
     }

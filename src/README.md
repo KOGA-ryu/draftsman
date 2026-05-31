@@ -29,7 +29,7 @@ The native shell is organized by UI responsibility. Keep new work in the smalles
 - `project_registry_lookup.cpp`: registry lookup and display helpers.
 - `shell_layout.*`: agent-editable shell layout model for tabs, rail sections, blank panels, inspector panels, and review lines.
 - `shell_layout_settings_page.*`: human settings UI for adding, removing, renaming, enabling, and filling shell layout records.
-- `ui_theme.*`, `theme_settings_page.*`: three-color low-light palette model, persistence, derived UI tokens, and human theme controls.
+- `ui_theme.*`, `theme_settings_page.*`: four-color low-light palette model, persistence, derived UI tokens, and human theme controls.
 - `repo_diff_scan_state.*`: repo diff-scan view state and parser.
 - `repo_contract_check_state.*`: repo contract-check view state and parser.
 - `repo_proof_receipt_state.*`: repo proof receipt view state, parser, and loader.
