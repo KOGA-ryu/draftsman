@@ -12,6 +12,8 @@
 #include "repo_binder_page_helpers.h"
 #include "repo_cleanup_queue_state.h"
 #include "shell_layout.h"
+#include "text_editor_workbench_page.h"
+#include "text_editor_workbench_state.h"
 
 namespace DexBinderPages {
 namespace {
@@ -150,6 +152,9 @@ QWidget *buildRepoBlankPage(
     const CockpitState &state,
     const QString &topTab,
     const QString &detailLens) {
+    if (DexTextEditorWorkbench::textEditorWorkbenchActive(state.featureRegistry, topTab)) {
+        return DexTextEditorWorkbench::buildTextEditorWorkbenchPage(state, topTab, detailLens);
+    }
     return buildCompactPage([state, topTab, detailLens](QVBoxLayout *layout) {
         const QVector<DraftsmanShell::ShellPanel> panels =
             DraftsmanShell::enabledPanelsForTab(state.shellLayout, topTab);

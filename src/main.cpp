@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
     const QCommandLineOption workerOption("worker", "Initial worker lens.", "worker-id");
     const QCommandLineOption repoBinderOption("repo-binder", "Start in repo binder mode.");
     const QCommandLineOption settingsOption("settings", "Start on the project registry settings spec sheet.");
+    const QCommandLineOption settingsTabOption("settings-tab", "Start on a named Settings tab.", "tab");
     parser.addOption(screenshotOption);
     parser.addOption(sizeOption);
     parser.addOption(hideRailOption);
@@ -71,6 +72,7 @@ int main(int argc, char **argv) {
     parser.addOption(workerOption);
     parser.addOption(repoBinderOption);
     parser.addOption(settingsOption);
+    parser.addOption(settingsTabOption);
     parser.process(app);
 
     const QString repoRoot = parser.isSet(repoRootOption)
@@ -103,6 +105,9 @@ int main(int argc, char **argv) {
     }
     if (parser.isSet(settingsOption)) {
         window.setSettingsMode(true);
+    }
+    if (parser.isSet(settingsTabOption)) {
+        window.setSettingsTab(parser.value(settingsTabOption));
     }
     if (parser.isSet(hideRailOption)) {
         window.setProjectRailVisible(false);

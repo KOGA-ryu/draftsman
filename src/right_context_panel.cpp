@@ -16,6 +16,8 @@
 #include "repo_context_renderer.h"
 #include "right_context_render_helpers.h"
 #include "shell_layout.h"
+#include "text_editor_workbench_context.h"
+#include "text_editor_workbench_state.h"
 #include "ui_rules.h"
 
 namespace {
@@ -75,6 +77,11 @@ void RightContextPanel::setState(
     clearLayout(contentLayout_);
 
     if (repoMode) {
+        if (DexTextEditorWorkbench::textEditorWorkbenchContextActive(state.featureRegistry, selectedTopTab)) {
+            DexTextEditorWorkbench::addTextEditorWorkbenchContext(contentLayout_, state, selectedTopTab, selectedDetailLens);
+            contentLayout_->addStretch(1);
+            return;
+        }
         const QVector<DexProjects::ProjectRegistryEntry> projects = registryProjectsForState(state);
         const DexProjects::ProjectRegistryEntry *selected = DexProjects::findProjectById(projects, selectedProjectId);
         if (!selected) {

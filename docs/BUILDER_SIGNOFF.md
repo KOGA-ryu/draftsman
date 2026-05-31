@@ -19,6 +19,55 @@ Follow-up owner:
 
 ## Sign-Offs
 
+### 2026-05-31 - Text editor workbench renderer
+
+Builder/session key: builder-dex-text-editor-workbench-renderer-2026-05-31
+
+Work order: Text Editor Workbench Renderer, delegated from source thread `019e7d7e-69e9-72c3-95f1-7801532952ef`
+
+Summary: Added a small enabled-feature routing layer and a first reusable `text_editor_workbench` renderer. Enabled target tabs render a local `QPlainTextEdit` workbench with document metadata, status facts, output/receipt shelves, and text-editor right-context panels. The shipped `data/features.json` entry remains disabled by default.
+
+Files touched:
+- `CMakeLists.txt`
+- `docs/BUILDER_SIGNOFF.md`
+- `docs/proof/blank_slate/01_blank_repo_binder_1280x800.png`
+- `docs/proof/blank_slate/04_features_settings_1280x800.png`
+- `docs/proof/blank_slate/05_text_editor_workbench_enabled_1280x800.png`
+- `src/feature_routing.h`
+- `src/feature_routing.cpp`
+- `src/ledger_view.h`
+- `src/main.cpp`
+- `src/main_window.h`
+- `src/main_window.cpp`
+- `src/repo_profile_pages.cpp`
+- `src/right_context_panel.cpp`
+- `src/text_editor_workbench_state.h`
+- `src/text_editor_workbench_state.cpp`
+- `src/text_editor_workbench_page.h`
+- `src/text_editor_workbench_page.cpp`
+- `src/text_editor_workbench_context.h`
+- `src/text_editor_workbench_context.cpp`
+- `tests/state_backend_smoke.cpp`
+
+Settings/data changed: `data/features.json` remains disabled by default. Added a proof-only `--settings-tab` launch option so Settings tab screenshots can be captured without manual UI interaction.
+
+Verification run:
+- `python3 scripts/validate_shell_layout.py data/shell_layout.json`
+- `python3 scripts/validate_ui_theme.py data/ui_theme.json`
+- `python3 scripts/validate_features.py data/features.json`
+- `cmake --build build`
+- `ctest --test-dir build --output-on-failure`
+- Confirmed `data/features.json` still reports `text_editor_workbench enabled= False`.
+
+Proof/screenshots:
+- Refreshed `docs/proof/blank_slate/01_blank_repo_binder_1280x800.png` for the default disabled feature state.
+- Added `docs/proof/blank_slate/04_features_settings_1280x800.png` for the Settings `Features` tab.
+- Added `docs/proof/blank_slate/05_text_editor_workbench_enabled_1280x800.png` using a temporary `/tmp/draftsman_text_editor_proof/data/features.json` with only `text_editor_workbench.enabled` set to true.
+
+Known gaps: Rust text action runner, command palette, fixture runner, clipboard writing, document persistence, and project-specific document lists remain intentionally unimplemented.
+
+Follow-up owner: Architect Dex to issue focused work orders for command actions, persistence, and runner integration.
+
 ### 2026-05-31 - Text editor workbench feature foundation
 
 Builder/session key: builder-dex-text-editor-workbench-foundation-2026-05-31

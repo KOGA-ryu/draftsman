@@ -125,6 +125,7 @@ public:
         registry.projects = state.registryProjects;
         registry.workers = state.registryWorkers;
         auto *settingsTabs = new QTabWidget;
+        settingsTabs->setObjectName("settingsTabs");
         settingsTabs->addTab(new ShellLayoutSettingsPage(
             state.shellLayout,
             std::move(onSaveShellLayout),

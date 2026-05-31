@@ -6,12 +6,14 @@
 
 #include "app_state_helpers.h"
 #include "binder_navigation.h"
+#include "ledger_view.h"
 #include "repo_contract_check_state.h"
 #include "repo_diff_scan_state.h"
 #include "project_rail.h"
 #include "right_context_panel.h"
 #include "sheet_stack_body.h"
 #include "shell_layout.h"
+#include <QTabWidget>
 #include <QToolButton>
 #include "ui_rules.h"
 
@@ -144,4 +146,23 @@ void DraftsmanWindow::setSettingsMode(bool enabled) {
         }
     }
     refreshViews();
+}
+
+void DraftsmanWindow::setSettingsTab(const QString &tabName) {
+    if (!settingsMode_) {
+        setSettingsMode(true);
+    }
+    if (!ledger_) {
+        return;
+    }
+    auto *tabs = ledger_->findChild<QTabWidget *>("settingsTabs");
+    if (!tabs) {
+        return;
+    }
+    for (int index = 0; index < tabs->count(); ++index) {
+        if (tabs->tabText(index).compare(tabName, Qt::CaseInsensitive) == 0) {
+            tabs->setCurrentIndex(index);
+            return;
+        }
+    }
 }

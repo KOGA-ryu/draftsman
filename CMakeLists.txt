@@ -28,6 +28,7 @@ add_executable(draftsman
     src/detail_lens_rail.cpp
     src/feature_registry_parse.cpp
     src/feature_registry_store.cpp
+    src/feature_routing.cpp
     src/feature_settings_page.cpp
     src/main.cpp
     src/main_window_chrome.cpp
@@ -85,6 +86,9 @@ add_executable(draftsman
     src/sheet_stack_body.cpp
     src/shell_layout.cpp
     src/shell_layout_settings_page.cpp
+    src/text_editor_workbench_context.cpp
+    src/text_editor_workbench_page.cpp
+    src/text_editor_workbench_state.cpp
     src/theme_settings_page.cpp
     src/ui_theme.cpp
     src/ui_style_base_chrome.cpp
@@ -106,6 +110,7 @@ add_executable(draftsman_smoke
     src/binder_stats_state.cpp
     src/feature_registry_parse.cpp
     src/feature_registry_store.cpp
+    src/feature_routing.cpp
     src/project_registry_lookup.cpp
     src/project_registry_parse.cpp
     src/project_registry_spec_model.cpp
@@ -114,6 +119,7 @@ add_executable(draftsman_smoke
     src/repo_binder_template_default.cpp
     src/repo_binder_template_store.cpp
     src/shell_layout.cpp
+    src/text_editor_workbench_state.cpp
     src/ui_theme.cpp
     tests/state_backend_smoke.cpp
 )

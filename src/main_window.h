@@ -27,6 +27,7 @@ public:
     void setSelectedWorker(const QString &workerId);
     void setSelectedProject(const QString &projectId);
     void setSettingsMode(bool enabled);
+    void setSettingsTab(const QString &tabName);
 
 private:
     static QString resolveProjectRegistryPath(const QString &requestedPath);

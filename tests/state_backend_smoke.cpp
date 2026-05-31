@@ -13,6 +13,7 @@
 #include "project_registry_spec_model.h"
 #include "repo_binder_template.h"
 #include "shell_layout.h"
+#include "text_editor_workbench_state.h"
 #include "ui_theme.h"
 
 class StateBackendSmoke final : public QObject {
@@ -247,6 +248,55 @@ private slots:
             DexFeatures::findFeatureById(loaded, "text_editor_workbench");
         QVERIFY(loadedFeature != nullptr);
         QVERIFY(loadedFeature->enabled);
+    }
+
+    void textEditorWorkbenchRoutingRequiresEnabledTargetTab() {
+        DexFeatures::FeatureRegistry registry;
+        registry.loaded = true;
+        DexFeatures::FeatureRecord feature;
+        feature.featureId = "text_editor_workbench";
+        feature.label = "Text Editor";
+        feature.status = "planned";
+        feature.rendererType = "text_editor_workbench";
+        feature.enabled = false;
+        feature.settings = QJsonObject{
+            {"target_tabs", QJsonArray{"Artifacts", "Reviews"}},
+            {"show_right_context", true},
+        };
+        registry.features.push_back(feature);
+
+        QVERIFY(!DexTextEditorWorkbench::textEditorWorkbenchActive(registry, "Artifacts"));
+        registry.features.first().enabled = true;
+        QVERIFY(DexTextEditorWorkbench::textEditorWorkbenchActive(registry, "Artifacts"));
+        QVERIFY(!DexTextEditorWorkbench::textEditorWorkbenchActive(registry, "Research"));
+        QVERIFY(DexTextEditorWorkbench::textEditorWorkbenchContextActive(registry, "Reviews"));
+    }
+
+    void textEditorWorkbenchRoutingHonorsHiddenRightContext() {
+        DexFeatures::FeatureRegistry registry;
+        registry.loaded = true;
+        DexFeatures::FeatureRecord feature;
+        feature.featureId = "text_editor_workbench";
+        feature.label = "Text Editor";
+        feature.status = "planned";
+        feature.rendererType = "text_editor_workbench";
+        feature.enabled = true;
+        feature.settings = QJsonObject{
+            {"target_tabs", QJsonArray{"Artifacts"}},
+            {"show_right_context", false},
+            {"default_document_name", "notes.md"},
+            {"default_language", "markdown"},
+            {"max_preview_chars", 500},
+        };
+        registry.features.push_back(feature);
+
+        QVERIFY(DexTextEditorWorkbench::textEditorWorkbenchActive(registry, "Artifacts"));
+        QVERIFY(!DexTextEditorWorkbench::textEditorWorkbenchContextActive(registry, "Artifacts"));
+        const DexTextEditorWorkbench::TextEditorWorkbenchState state =
+            DexTextEditorWorkbench::textEditorWorkbenchState(registry.features.first());
+        QCOMPARE(state.documentName, QString("notes.md"));
+        QCOMPARE(state.language, QString("markdown"));
+        QCOMPARE(state.maxPreviewChars, 500);
     }
 
     void shellLayoutParsesAgentEditableLines() {
