@@ -11,6 +11,8 @@
 #include "feature_registry.h"
 #include "project_registry.h"
 #include "project_registry_spec_model.h"
+#include "rabbit_hole_review_model.h"
+#include "rabbit_hole_review_state.h"
 #include "repo_binder_template.h"
 #include "shell_layout.h"
 #include "text_editor_workbench_state.h"
@@ -198,6 +200,23 @@ private slots:
         QCOMPARE(feature->settings.value("enable_clipboard_write").toBool(true), false);
     }
 
+    void productionFeatureRegistryHasDisabledRabbitHoleReviewWorkspace() {
+        const QString path = QString::fromUtf8(DRAFTSMAN_SOURCE_DIR) + "/data/features.json";
+        const DexFeatures::FeatureRegistry registry = DexFeatures::loadFeatureRegistryFile(path);
+
+        QVERIFY2(registry.loaded, qPrintable(registry.error));
+        const DexFeatures::FeatureRecord *feature =
+            DexFeatures::findFeatureById(registry, "rabbit_hole_review_workspace");
+        QVERIFY(feature != nullptr);
+        QCOMPARE(feature->label, QString("Rabbit-Hole Review"));
+        QCOMPARE(feature->status, QString("planned"));
+        QCOMPARE(feature->rendererType, QString("rabbit_hole_review_workspace"));
+        QVERIFY(!feature->enabled);
+        QCOMPARE(feature->settings.value("fixture_path").toString(), QString("docs/examples/rabbit_hole_review_fixture.json"));
+        QCOMPARE(feature->settings.value("persist_review_state").toBool(true), false);
+        QCOMPARE(feature->settings.value("enable_exports").toBool(true), false);
+    }
+
     void featureRegistryParserIgnoresUnknownFields() {
         const QJsonDocument document(QJsonObject{
             {"schema_version", 1},
@@ -297,6 +316,103 @@ private slots:
         QCOMPARE(state.documentName, QString("notes.md"));
         QCOMPARE(state.language, QString("markdown"));
         QCOMPARE(state.maxPreviewChars, 500);
+    }
+
+    void rabbitHoleReviewRoutingRequiresEnabledTargetTab() {
+        DexFeatures::FeatureRegistry registry;
+        registry.loaded = true;
+        DexFeatures::FeatureRecord feature;
+        feature.featureId = "rabbit_hole_review_workspace";
+        feature.label = "Rabbit-Hole Review";
+        feature.status = "planned";
+        feature.rendererType = "rabbit_hole_review_workspace";
+        feature.enabled = false;
+        feature.settings = QJsonObject{
+            {"target_tabs", QJsonArray{"Reviews", "Artifacts"}},
+            {"show_left_subs", true},
+            {"show_right_context", true},
+        };
+        registry.features.push_back(feature);
+
+        QVERIFY(!DexRabbitHoleReview::rabbitHoleReviewActive(registry, "Reviews"));
+        registry.features.first().enabled = true;
+        QVERIFY(DexRabbitHoleReview::rabbitHoleReviewActive(registry, "Reviews"));
+        QVERIFY(DexRabbitHoleReview::rabbitHoleReviewActive(registry, "Artifacts"));
+        QVERIFY(!DexRabbitHoleReview::rabbitHoleReviewActive(registry, "Research"));
+        QVERIFY(DexRabbitHoleReview::rabbitHoleReviewLeftSubsActive(registry, "Reviews"));
+        QVERIFY(DexRabbitHoleReview::rabbitHoleReviewContextActive(registry, "Reviews"));
+    }
+
+    void rabbitHoleReviewSettingsUseSafeDefaults() {
+        DexFeatures::FeatureRecord feature;
+        feature.featureId = "rabbit_hole_review_workspace";
+        feature.label = "Rabbit-Hole Review";
+        feature.status = "planned";
+        feature.rendererType = "rabbit_hole_review_workspace";
+        feature.enabled = true;
+        feature.settings = QJsonObject{};
+
+        const DexRabbitHoleReview::RabbitHoleReviewState state =
+            DexRabbitHoleReview::rabbitHoleReviewState(feature);
+
+        QVERIFY(state.showLeftSubs);
+        QVERIFY(state.showRightContext);
+        QVERIFY(!state.persistReviewState);
+        QVERIFY(state.enableComponentFocus);
+        QVERIFY(!state.enableExports);
+        QCOMPARE(state.fixturePath, QString("docs/examples/rabbit_hole_review_fixture.json"));
+        QCOMPARE(state.maxCommentChars, 4000);
+    }
+
+    void rabbitHoleReviewFixtureParserIgnoresUnknownFields() {
+        const QJsonDocument document(QJsonObject{
+            {"schema_version", 1},
+            {"unknown_root", "ignored"},
+            {"subject", QJsonObject{
+                {"subject_id", "subject"},
+                {"label", "Subject"},
+                {"status", "candidate"},
+                {"summary", "summary"},
+                {"unknown_subject", "ignored"},
+            }},
+            {"routes", QJsonArray{QJsonObject{
+                {"route_id", "overview"},
+                {"label", "Overview"},
+                {"status", "pending"},
+                {"children", QJsonArray{"overview/detail"}},
+                {"unknown_route", "ignored"},
+            }, QJsonObject{
+                {"route_id", "overview/detail"},
+                {"label", "Detail"},
+                {"status", "accepted"},
+            }}},
+            {"components", QJsonArray{QJsonObject{
+                {"component_id", "component"},
+                {"label", "Component"},
+                {"route_id", "overview/detail"},
+                {"status", "accepted"},
+                {"unknown_component", "ignored"},
+            }}},
+            {"comments", QJsonArray{QJsonObject{
+                {"comment_id", "comment"},
+                {"route_id", "overview/detail"},
+                {"component_id", "component"},
+                {"selected_tab", "Comments"},
+                {"status", "accepted"},
+                {"comment", "Looks good."},
+                {"unknown_comment", "ignored"},
+            }}},
+        });
+
+        const DexRabbitHoleReview::ReviewFixture fixture =
+            DexRabbitHoleReview::parseReviewFixtureDocument(document);
+
+        QVERIFY(fixture.loaded);
+        QCOMPARE(fixture.subject.subjectId, QString("subject"));
+        QCOMPARE(fixture.routes.size(), 2);
+        QCOMPARE(DexRabbitHoleReview::componentsForRoute(fixture, "overview/detail").size(), 1);
+        QCOMPARE(DexRabbitHoleReview::commentsForRoute(fixture, "overview/detail").size(), 1);
+        QCOMPARE(DexRabbitHoleReview::routeBreadcrumbLabels(fixture, "overview/detail"), QStringList({"Subject", "Overview", "Detail"}));
     }
 
     void shellLayoutParsesAgentEditableLines() {

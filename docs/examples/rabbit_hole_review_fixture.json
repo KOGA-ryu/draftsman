@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "subject": {
+    "subject_id": "sample_review_subject",
+    "label": "Sample Review Subject",
+    "status": "candidate",
+    "summary": "A fixture-backed review subject used to prove route-attached comments and component review status without project writes.",
+    "preview": {
+      "kind": "placeholder",
+      "label": "Focused preview placeholder",
+      "description": "Component focus is represented as a neutral placeholder in this pass."
+    },
+    "unknown_subject_field": "ignored"
+  },
+  "routes": [
+    {
+      "route_id": "overview",
+      "label": "Overview",
+      "summary": "Top-level review route.",
+      "status": "pending",
+      "children": [
+        "structure",
+        "interaction",
+        "evidence"
+      ]
+    },
+    {
+      "route_id": "structure",
+      "label": "Structure",
+      "summary": "Review the layout, grouping, and scan order.",
+      "status": "accepted",
+      "children": [
+        "structure/header",
+        "structure/cards"
+      ]
+    },
+    {
+      "route_id": "structure/header",
+      "label": "Header",
+      "summary": "Subject identity, status, and current route should be readable at a glance.",
+      "status": "accepted",
+      "children": []
+    },
+    {
+      "route_id": "structure/cards",
+      "label": "Drilldown Cards",
+      "summary": "Cards should make the next route choice clear without adding visual clutter.",
+      "status": "needs_rework",
+      "children": []
+    },
+    {
+      "route_id": "interaction",
+      "label": "Interaction",
+      "summary": "Review the in-memory navigation pattern.",
+      "status": "pending",
+      "children": [
+        "interaction/breadcrumb",
+        "interaction/history"
+      ]
+    },
+    {
+      "route_id": "interaction/breadcrumb",
+      "label": "Breadcrumb",
+      "summary": "The breadcrumb should show the exact route under review.",
+      "status": "pending",
+      "children": []
+    },
+    {
+      "route_id": "interaction/history",
+      "label": "History Controls",
+      "summary": "Back, forward, and home controls should be predictable.",
+      "status": "pending",
+      "children": []
+    },
+    {
+      "route_id": "evidence",
+      "label": "Evidence",
+      "summary": "Review comments and receipts should stay route-attached.",
+      "status": "rejected",
+      "children": []
+    }
+  ],
+  "components": [
+    {
+      "component_id": "subject_header",
+      "label": "Subject Header",
+      "route_id": "structure/header",
+      "status": "accepted",
+      "summary": "Displays the subject label and route status."
+    },
+    {
+      "component_id": "route_card_grid",
+      "label": "Route Card Grid",
+      "route_id": "structure/cards",
+      "status": "needs_rework",
+      "summary": "Presents child routes as review targets."
+    },
+    {
+      "component_id": "history_controls",
+      "label": "History Controls",
+      "route_id": "interaction/history",
+      "status": "pending",
+      "summary": "Keeps local navigation in memory only."
+    },
+    {
+      "component_id": "receipt_panel",
+      "label": "Receipt Panel",
+      "route_id": "evidence",
+      "status": "rejected",
+      "summary": "Shows persistence and export state without writing files."
+    }
+  ],
+  "comments": [
+    {
+      "comment_id": "comment_001",
+      "route_id": "structure/cards",
+      "component_id": "route_card_grid",
+      "selected_tab": "Components",
+      "status": "needs_rework",
+      "comment": "Card grouping is useful, but the selected status needs stronger scan hierarchy.",
+      "created_at": "2026-05-31T12:00:00Z"
+    },
+    {
+      "comment_id": "comment_002",
+      "route_id": "evidence",
+      "component_id": "receipt_panel",
+      "selected_tab": "Validation",
+      "status": "rejected",
+      "comment": "Persistence must remain disabled until the write contract is approved.",
+      "created_at": "2026-05-31T12:10:00Z"
+    }
+  ],
+  "unknown_root_field": "ignored"
+}

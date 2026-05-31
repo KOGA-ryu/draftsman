@@ -25,6 +25,30 @@
         "enable_clipboard_write": false,
         "max_preview_chars": 12000
       }
+    },
+    {
+      "feature_id": "rabbit_hole_review_workspace",
+      "label": "Rabbit-Hole Review",
+      "status": "planned",
+      "renderer_type": "rabbit_hole_review_workspace",
+      "enabled": false,
+      "target_surfaces": [
+        "center",
+        "right_context"
+      ],
+      "settings": {
+        "target_tabs": [
+          "Reviews",
+          "Artifacts"
+        ],
+        "show_left_subs": true,
+        "show_right_context": true,
+        "fixture_path": "docs/examples/rabbit_hole_review_fixture.json",
+        "persist_review_state": false,
+        "enable_component_focus": true,
+        "enable_exports": false,
+        "max_comment_chars": 4000
+      }
     }
   ]
 }

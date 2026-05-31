@@ -47,6 +47,10 @@ add_executable(draftsman
     src/project_registry_spec_model.cpp
     src/project_registry_spec_page.cpp
     src/project_registry_store.cpp
+    src/rabbit_hole_review_context.cpp
+    src/rabbit_hole_review_model.cpp
+    src/rabbit_hole_review_page.cpp
+    src/rabbit_hole_review_state.cpp
     src/render_helpers.cpp
     src/repo_activity_pages.cpp
     src/repo_authority_pages.cpp
@@ -115,6 +119,8 @@ add_executable(draftsman_smoke
     src/project_registry_parse.cpp
     src/project_registry_spec_model.cpp
     src/project_registry_store.cpp
+    src/rabbit_hole_review_model.cpp
+    src/rabbit_hole_review_state.cpp
     src/repo_binder_template.cpp
     src/repo_binder_template_default.cpp
     src/repo_binder_template_store.cpp

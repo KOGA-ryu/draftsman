@@ -11,6 +11,8 @@
 #include "agent_context_renderer.h"
 #include "app_state_helpers.h"
 #include "project_registry.h"
+#include "rabbit_hole_review_context.h"
+#include "rabbit_hole_review_state.h"
 #include "render_helpers.h"
 #include "repo_binder_template.h"
 #include "repo_context_renderer.h"
@@ -79,6 +81,11 @@ void RightContextPanel::setState(
     if (repoMode) {
         if (DexTextEditorWorkbench::textEditorWorkbenchContextActive(state.featureRegistry, selectedTopTab)) {
             DexTextEditorWorkbench::addTextEditorWorkbenchContext(contentLayout_, state, selectedTopTab, selectedDetailLens);
+            contentLayout_->addStretch(1);
+            return;
+        }
+        if (DexRabbitHoleReview::rabbitHoleReviewContextActive(state.featureRegistry, selectedTopTab)) {
+            DexRabbitHoleReview::addRabbitHoleReviewContext(contentLayout_, state, selectedTopTab, selectedDetailLens);
             contentLayout_->addStretch(1);
             return;
         }

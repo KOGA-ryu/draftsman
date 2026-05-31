@@ -9,6 +9,8 @@
 #include "app_state_helpers.h"
 #include "binder_page_helpers.h"
 #include "render_helpers.h"
+#include "rabbit_hole_review_page.h"
+#include "rabbit_hole_review_state.h"
 #include "repo_binder_page_helpers.h"
 #include "repo_cleanup_queue_state.h"
 #include "shell_layout.h"
@@ -154,6 +156,9 @@ QWidget *buildRepoBlankPage(
     const QString &detailLens) {
     if (DexTextEditorWorkbench::textEditorWorkbenchActive(state.featureRegistry, topTab)) {
         return DexTextEditorWorkbench::buildTextEditorWorkbenchPage(state, topTab, detailLens);
+    }
+    if (DexRabbitHoleReview::rabbitHoleReviewActive(state.featureRegistry, topTab)) {
+        return DexRabbitHoleReview::buildRabbitHoleReviewPage(state, topTab, detailLens);
     }
     return buildCompactPage([state, topTab, detailLens](QVBoxLayout *layout) {
         const QVector<DraftsmanShell::ShellPanel> panels =
