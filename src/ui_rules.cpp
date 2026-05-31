@@ -1,26 +1,108 @@
 #include "ui_rules.h"
 
+#include <QColor>
 #include <QFontDatabase>
+#include <QtGlobal>
+
+#include <cmath>
 
 namespace dex_ui {
+namespace {
 
-QString colors::bg_root() { return "#f4f6f8"; }
-QString colors::bg_rail_light() { return "#f8fafb"; }
-QString colors::bg_rail_mid() { return "#e6ebf0"; }
-QString colors::bg_rail_dark() { return "#8c949c"; }
-QString colors::bg_center() { return "#ededee"; }
-QString colors::bg_context() { return "#f7f8fa"; }
-QString colors::bg_section() { return "#ffffff"; }
-QString colors::border_soft() { return "#c1c8ce"; }
-QString colors::text_primary() { return "#202329"; }
-QString colors::text_muted() { return "#4d555d"; }
-QString colors::selected_bg() { return "#ffffff"; }
-QString colors::hover_bg() { return "#eef2f5"; }
-QString colors::risk_normal() { return "#dfe7df"; }
-QString colors::risk_bulky() { return "#e8e1d3"; }
-QString colors::risk_split_candidate() { return "#ead8d8"; }
-QString colors::risk_generated() { return "#dce3ea"; }
-QString colors::risk_inspect_first() { return "#e8dfcf"; }
+UiTheme g_theme = defaultUiTheme();
+
+QColor colorFrom(const QString &value, const QString &fallback) {
+    const QColor color(value);
+    return color.isValid() ? color : QColor(fallback);
+}
+
+QColor blend(const QColor &a, const QColor &b, double ratio) {
+    const double t = qBound(0.0, ratio, 1.0);
+    return QColor(
+        qRound(a.red() * (1.0 - t) + b.red() * t),
+        qRound(a.green() * (1.0 - t) + b.green() * t),
+        qRound(a.blue() * (1.0 - t) + b.blue() * t));
+}
+
+double channel(double value) {
+    value /= 255.0;
+    return value <= 0.03928 ? value / 12.92 : std::pow((value + 0.055) / 1.055, 2.4);
+}
+
+double luminance(const QColor &color) {
+    return 0.2126 * channel(color.red()) + 0.7152 * channel(color.green()) + 0.0722 * channel(color.blue());
+}
+
+QColor shiftedHue(QColor color, int degrees) {
+    int h = color.hsvHue();
+    if (h < 0) {
+        h = 0;
+    }
+    color.setHsv((h + degrees) % 360, qMin(180, qMax(75, color.hsvSaturation())), qMin(210, qMax(80, color.value())));
+    return color;
+}
+
+QString hex(const QColor &color) {
+    return color.name(QColor::HexRgb);
+}
+
+QColor base() {
+    return colorFrom(g_theme.base, defaultUiTheme().base);
+}
+
+QColor surface() {
+    return colorFrom(g_theme.surface, defaultUiTheme().surface);
+}
+
+QColor accent() {
+    return colorFrom(g_theme.accent, defaultUiTheme().accent);
+}
+
+QColor textOn(const QColor &background) {
+    if (luminance(background) < 0.35) {
+        return blend(QColor("#e9eee9"), accent(), 0.08);
+    }
+    return blend(QColor("#11161a"), accent(), 0.06);
+}
+
+} // namespace
+
+void set_active_theme(const UiTheme &theme) {
+    g_theme = theme;
+    g_theme.base = normalizedColor(g_theme.base, defaultUiTheme().base);
+    g_theme.surface = normalizedColor(g_theme.surface, defaultUiTheme().surface);
+    g_theme.accent = normalizedColor(g_theme.accent, defaultUiTheme().accent);
+}
+
+UiTheme active_theme() {
+    return g_theme;
+}
+
+QString colors::bg_root() { return hex(base()); }
+QString colors::bg_rail_light() { return hex(blend(surface(), base(), 0.18)); }
+QString colors::bg_rail_mid() { return hex(blend(base(), surface(), 0.42)); }
+QString colors::bg_rail_dark() { return hex(blend(base(), accent(), 0.45)); }
+QString colors::bg_center() { return hex(blend(base(), surface(), 0.32)); }
+QString colors::bg_context() { return hex(blend(base(), surface(), 0.24)); }
+QString colors::bg_section() { return hex(surface()); }
+QString colors::border_soft() { return hex(blend(surface(), accent(), 0.35)); }
+QString colors::text_primary() { return hex(textOn(surface())); }
+QString colors::text_muted() { return hex(blend(textOn(surface()), surface(), 0.38)); }
+QString colors::selected_bg() { return hex(blend(surface(), accent(), 0.18)); }
+QString colors::hover_bg() { return hex(blend(surface(), accent(), 0.12)); }
+QString colors::risk_normal() { return hex(blend(surface(), accent(), 0.20)); }
+QString colors::risk_bulky() { return hex(blend(surface(), shiftedHue(accent(), 35), 0.22)); }
+QString colors::risk_split_candidate() { return hex(blend(surface(), shiftedHue(accent(), 95), 0.20)); }
+QString colors::risk_generated() { return hex(blend(surface(), shiftedHue(accent(), 200), 0.18)); }
+QString colors::risk_inspect_first() { return hex(blend(surface(), shiftedHue(accent(), 65), 0.20)); }
+QString colors::toolbar_bg() { return hex(blend(base(), surface(), 0.22)); }
+QString colors::border_strong() { return hex(blend(surface(), accent(), 0.62)); }
+QString colors::primary_action_bg() { return hex(blend(accent(), textOn(surface()), luminance(surface()) < 0.42 ? 0.10 : 0.28)); }
+QString colors::primary_action_text() { return hex(textOn(colorFrom(colors::primary_action_bg(), "#222222"))); }
+QString colors::primary_action_hover() { return hex(blend(colorFrom(colors::primary_action_bg(), "#222222"), textOn(surface()), 0.16)); }
+QString colors::tab_hover_bg() { return QString("rgba(%1, %2, %3, 0.35)").arg(accent().red()).arg(accent().green()).arg(accent().blue()); }
+QString colors::risk_text() { return hex(blend(textOn(surface()), shiftedHue(accent(), 95), 0.34)); }
+QString colors::good_text() { return hex(blend(textOn(surface()), accent(), 0.30)); }
 
 QString app_font_family() {
     const QStringList installedFamilies = QFontDatabase::families();

@@ -4,6 +4,18 @@ Draftsman is meant to be filled by agents without changing C++.
 
 Use `data/shell_layout.json` for the visible blank-shell structure and light repo knowledge. Use `data/projects.json` for project registry facts. Keep generated or experimental source material outside the final blank unless the human asks to promote it.
 
+Use `data/ui_theme.json` for the global three-color UI palette:
+
+```json
+{
+  "base": "#141719",
+  "surface": "#24282c",
+  "accent": "#7fa8b8"
+}
+```
+
+Do not hard-code project colors into C++ or stylesheet files. Change the three theme colors and let the stylesheet derive the rest.
+
 ## Shell Layout
 
 Agents may edit these fields in `data/shell_layout.json`:
@@ -39,7 +51,8 @@ Panel records have this shape:
 2. Write selected facts into a copy of `data/shell_layout.json`.
 3. Keep the UI blank where facts are uncertain instead of inventing content.
 4. Run `python3 scripts/validate_shell_layout.py data/shell_layout.json`.
-5. Run `cmake --build build` and `ctest --test-dir build --output-on-failure`.
+5. Run `python3 scripts/validate_ui_theme.py data/ui_theme.json` if the palette changed.
+6. Run `cmake --build build` and `ctest --test-dir build --output-on-failure`.
 
 ## Boundaries
 

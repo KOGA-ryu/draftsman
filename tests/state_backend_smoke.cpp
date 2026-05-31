@@ -12,6 +12,7 @@
 #include "project_registry_spec_model.h"
 #include "repo_binder_template.h"
 #include "shell_layout.h"
+#include "ui_theme.h"
 
 class StateBackendSmoke final : public QObject {
     Q_OBJECT
@@ -151,6 +152,21 @@ private slots:
         QVERIFY(DraftsmanShell::enabledTabLabels(layout).contains("Reviews"));
         QVERIFY(!DraftsmanShell::enabledPanelsForTab(layout, "Overview").isEmpty());
         QVERIFY(!DraftsmanShell::enabledInspectorPanels(layout, "Overview", "Dashboard").isEmpty());
+    }
+
+    void productionUiThemeUsesThreeEditableColors() {
+        const QString path = QString::fromUtf8(DRAFTSMAN_SOURCE_DIR) + "/data/ui_theme.json";
+        const dex_ui::UiTheme theme = dex_ui::loadUiThemeFile(path);
+
+        QVERIFY2(theme.loaded, qPrintable(theme.error));
+        QVERIFY(dex_ui::isValidColor(theme.base));
+        QVERIFY(dex_ui::isValidColor(theme.surface));
+        QVERIFY(dex_ui::isValidColor(theme.accent));
+        const QJsonObject serialized = dex_ui::uiThemeToJson(theme);
+        QCOMPARE(serialized.keys().size(), 3);
+        QVERIFY(serialized.contains("base"));
+        QVERIFY(serialized.contains("surface"));
+        QVERIFY(serialized.contains("accent"));
     }
 
     void shellLayoutParsesAgentEditableLines() {

@@ -31,6 +31,7 @@ public:
 private:
     static QString resolveProjectRegistryPath(const QString &requestedPath);
     static QString resolveShellLayoutPath();
+    static QString resolveUiThemePath();
     static QString resolveProofReceiptPath(const QString &requestedPath);
     static QString resolveBinderTemplateDirPath(const QString &projectRegistryPath);
     static QString resolvePromotionReportPath();
@@ -40,6 +41,7 @@ private:
     void reloadState();
     void loadProjectRegistryIntoState();
     void loadShellLayoutIntoState();
+    void loadUiThemeIntoState();
     void loadBinderTemplatesIntoState();
     void loadProofReceiptIntoState();
     void loadPromotionReportIntoState();
@@ -50,6 +52,7 @@ private:
     void exitSettingsMode();
     void saveProjectRegistryFromSettings(DexProjects::ProjectRegistry registry, const QString &selectedProjectId, bool exitAfterSave = false);
     void saveShellLayoutFromSettings(DraftsmanShell::ShellLayout layout, bool exitAfterSave = false);
+    void saveUiThemeFromSettings(dex_ui::UiTheme theme, bool exitAfterSave = false);
     void revertProjectRegistrySettings();
     void addGradeRecord();
     void addReviewVerdict(const QString &decision);
@@ -66,6 +69,7 @@ private:
     QString selectedProjectId_;
     QString projectRegistryPath_;
     QString shellLayoutPath_;
+    QString uiThemePath_;
     QString binderTemplateDirPath_;
     QString proofReceiptPath_;
     QString promotionReportPath_;

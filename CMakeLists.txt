@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Test)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Test Gui)
 
 get_filename_component(DRAFTSMAN_REPO_ROOT "${CMAKE_CURRENT_LIST_DIR}" ABSOLUTE)
 set(DEX_COCKPIT_CORE_BIN "${DRAFTSMAN_REPO_ROOT}/rust/target/debug/dex-cockpit-core")
@@ -82,6 +82,8 @@ add_executable(draftsman
     src/sheet_stack_body.cpp
     src/shell_layout.cpp
     src/shell_layout_settings_page.cpp
+    src/theme_settings_page.cpp
+    src/ui_theme.cpp
     src/ui_style_base_chrome.cpp
     src/ui_style_buttons.cpp
     src/ui_style_reports.cpp
@@ -107,6 +109,7 @@ add_executable(draftsman_smoke
     src/repo_binder_template_default.cpp
     src/repo_binder_template_store.cpp
     src/shell_layout.cpp
+    src/ui_theme.cpp
     tests/state_backend_smoke.cpp
 )
 
@@ -116,7 +119,7 @@ target_compile_definitions(draftsman_smoke PRIVATE
 )
 
 target_include_directories(draftsman_smoke PRIVATE src)
-target_link_libraries(draftsman_smoke PRIVATE Qt6::Test Qt6::Core)
+target_link_libraries(draftsman_smoke PRIVATE Qt6::Test Qt6::Core Qt6::Gui)
 
 enable_testing()
 add_test(NAME draftsman_smoke COMMAND draftsman_smoke)

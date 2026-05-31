@@ -37,7 +37,15 @@ QString app_qss() {
         .arg(colors::risk_split_candidate())
         .arg(colors::risk_generated())
         .arg(colors::risk_inspect_first())
-        .arg(app_font_family());
+        .arg(app_font_family())
+        .arg(colors::toolbar_bg())
+        .arg(colors::border_strong())
+        .arg(colors::primary_action_bg())
+        .arg(colors::primary_action_text())
+        .arg(colors::primary_action_hover())
+        .arg(colors::tab_hover_bg())
+        .arg(colors::risk_text())
+        .arg(colors::good_text());
 }
 
 } // namespace dex_ui

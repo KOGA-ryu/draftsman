@@ -5,6 +5,11 @@
 #include "repo_proof_receipt_state.h"
 #include "repo_promotion_report_state.h"
 #include "shell_layout.h"
+#include "ui_theme.h"
+#include "render_helpers.h"
+#include "ui_rules.h"
+
+#include <QApplication>
 
 #include <algorithm>
 
@@ -47,6 +52,12 @@ void DraftsmanWindow::loadBinderTemplatesIntoState() {
 
 void DraftsmanWindow::loadShellLayoutIntoState() {
     state_.shellLayout = DraftsmanShell::loadShellLayoutFile(shellLayoutPath_);
+}
+
+void DraftsmanWindow::loadUiThemeIntoState() {
+    state_.uiTheme = dex_ui::loadUiThemeFile(uiThemePath_);
+    dex_ui::set_active_theme(state_.uiTheme);
+    qApp->setStyleSheet(appStyleSheet());
 }
 
 void DraftsmanWindow::loadProofReceiptIntoState() {

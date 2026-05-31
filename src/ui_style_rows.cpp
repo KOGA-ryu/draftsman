@@ -12,21 +12,21 @@ QString railRowQss() {
             border-bottom-right-radius: %5px;
         }
         QFrame#projectRow[active="true"], QFrame#projectRow:hover {
-            border-color: #1f2328;
+            border-color: %25;
         }
         QFrame#workerRow {
             background: %13;
         }
         QFrame#workerRow[selected="true"] {
-            background: #f9fbfc;
-            border-color: #1f2328;
+            background: %16;
+            border-color: %25;
         }
         QFrame#settingsRow[active="true"] {
-            background: #f9fbfc;
-            border-color: #1f2328;
+            background: %16;
+            border-color: %25;
         }
         QFrame#settingsRow:hover, QFrame#candidateRow:hover, QFrame#compactRow:hover {
-            border-color: #aeb5bc;
+            border-color: %25;
         }
     )");
 }

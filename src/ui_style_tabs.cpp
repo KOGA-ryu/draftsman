@@ -7,7 +7,7 @@ QString tabQss() {
             background: transparent;
             color: %11;
             border: 0;
-            border-right: 1px solid #aeb5bc;
+            border-right: 1px solid %14;
             border-radius: 0px;
             min-height: %15px;
             max-height: %15px;
@@ -16,13 +16,13 @@ QString tabQss() {
             font-weight: 650;
         }
         QPushButton#ledgerTab:hover {
-            background: rgba(255, 255, 255, 0.45);
+            background: %29;
             color: %2;
         }
         QPushButton#ledgerTab:checked {
             background: %16;
             color: %2;
-            border: 1px solid #7f8790;
+            border: 1px solid %25;
             border-bottom-color: %16;
             border-top-left-radius: 9px;
             border-top-right-radius: 9px;
@@ -35,15 +35,15 @@ QString tabQss() {
             border-right: 0;
         }
         QFrame#detailLensRail {
-            background: #eef1f4;
-            border-left: 1px solid #9da4ac;
-            border-right: 1px solid #bdc2c7;
+            background: %6;
+            border-left: 1px solid %25;
+            border-right: 1px solid %14;
         }
         QPushButton#detailLensTab {
             background: transparent;
             color: %11;
             border: 0;
-            border-bottom: 1px solid #aeb5bc;
+            border-bottom: 1px solid %14;
             border-radius: 0px;
             min-height: 30px;
             max-height: 30px;
@@ -53,13 +53,13 @@ QString tabQss() {
             text-align: center;
         }
         QPushButton#detailLensTab:hover {
-            background: rgba(255, 255, 255, 0.50);
+            background: %29;
             color: %2;
         }
         QPushButton#detailLensTab:checked {
             background: %16;
             color: %2;
-            border: 1px solid #7f8790;
+            border: 1px solid %25;
             border-left-color: %16;
             border-top-left-radius: 9px;
             border-bottom-left-radius: 9px;

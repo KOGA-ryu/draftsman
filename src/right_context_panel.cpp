@@ -137,6 +137,7 @@ void RightContextPanel::setSettingsState(const CockpitState &state, const QStrin
     DexRightContext::addWrappedLine(contentLayout_, "screen                         shell layout / project registry");
     DexRightContext::addWrappedLine(contentLayout_, "save behavior                  explicit save only");
     DexRightContext::addWrappedLine(contentLayout_, "shell layout                   " + state.shellLayout.sourcePath);
+    DexRightContext::addWrappedLine(contentLayout_, "ui theme                       " + state.uiTheme.sourcePath);
     DexRightContext::addWrappedLine(contentLayout_, "registry                       " + (state.projectRegistrySource.isEmpty() ? QString("unknown") : state.projectRegistrySource));
     DexRightContext::addWrappedLine(contentLayout_, "loaded                         " + QString(state.projectRegistryLoaded ? "yes" : "no"));
     if (!state.projectRegistryError.isEmpty()) {
@@ -155,7 +156,7 @@ void RightContextPanel::setSettingsState(const CockpitState &state, const QStrin
     }
 
     DexRightContext::addContextSection(contentLayout_, "boundaries");
-    DexRightContext::addWrappedLine(contentLayout_, "writes                         shell_layout.json or projects.json");
+    DexRightContext::addWrappedLine(contentLayout_, "writes                         shell_layout.json, projects.json, ui_theme.json");
     DexRightContext::addWrappedLine(contentLayout_, "jsonl                          not touched");
     DexRightContext::addWrappedLine(contentLayout_, "backend scanner                not run by settings");
     DexRightContext::addWrappedLine(contentLayout_, "worker execution               not allowed");

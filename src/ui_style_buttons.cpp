@@ -15,11 +15,11 @@ QString buttonQss() {
         }
         QPushButton:hover {
             background: %13;
-            border-color: #aeb5bc;
+            border-color: %25;
         }
         QPushButton#rowAction {
-            background: #fbfcfd;
-            border: 1px solid #8d969f;
+            background: %16;
+            border: 1px solid %25;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: %5px;
@@ -33,9 +33,9 @@ QString buttonQss() {
             font-weight: 700;
         }
         QPushButton#primaryAction {
-            background: #1f2328;
-            color: #ffffff;
-            border: 1px solid #1f2328;
+            background: %26;
+            color: %27;
+            border: 1px solid %26;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: %5px;
@@ -47,11 +47,11 @@ QString buttonQss() {
             text-align: center;
         }
         QPushButton#primaryAction:hover {
-            background: #343941;
+            background: %28;
         }
         QPushButton#statsContextAction {
-            background: #ffffff;
-            border: 1px solid #bdc2c7;
+            background: %16;
+            border: 1px solid %14;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: 4px;

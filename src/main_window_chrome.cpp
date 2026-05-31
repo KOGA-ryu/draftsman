@@ -13,6 +13,7 @@
 #include "project_rail.h"
 #include "right_context_panel.h"
 #include "sheet_stack_body.h"
+#include "ui_rules.h"
 
 void DraftsmanWindow::buildToolbar() {
     auto *toolbar = new QToolBar("Draftsman chrome");
@@ -125,7 +126,8 @@ void DraftsmanWindow::buildBody() {
             bottomShelf_ = new QLabel("Terminal / proof / output / receipts");
             bottomShelf_->setAlignment(Qt::AlignCenter);
             bottomShelf_->setFixedHeight(32);
-            bottomShelf_->setStyleSheet("background:#eef2f5; border-top:1px solid #9da4ac;");
+            bottomShelf_->setStyleSheet(QString("background:%1; border-top:1px solid %2;")
+                .arg(dex_ui::colors::hover_bg(), dex_ui::colors::border_strong()));
             bottomHost_ = new QToolBar("Draftsman bottom shelf");
             bottomHost_->setMovable(false);
             bottomHost_->setFloatable(false);

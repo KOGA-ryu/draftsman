@@ -4,57 +4,57 @@ namespace dex_ui::style_sheet_sections {
 
 QString statsQss() {
     return QString(R"(        QFrame#statsSection, QFrame#statsSubtleSection {
-            background: #ffffff;
-            border: 1px solid #bdc2c7;
+            background: %16;
+            border: 1px solid %14;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
         }
         QFrame#statsSubtleSection {
-            background: #f7f8f9;
+            background: %13;
         }
         QFrame#statsRow {
-            background: #ffffff;
-            border: 1px solid #d2d7dc;
+            background: %16;
+            border: 1px solid %14;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
         }
         QFrame#statsRiskRow {
-            background: #ffffff;
-            border: 1px solid #d9a0a0;
+            background: %16;
+            border: 1px solid %25;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
         }
         QFrame#statsMiniCell {
-            background: #ffffff;
-            border: 1px solid #d2d7dc;
+            background: %16;
+            border: 1px solid %14;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
         }
         QLabel#statsTinyLabel {
-            color: #111315;
+            color: %2;
             font-size: 8px;
             background: transparent;
         }
         QLabel#statsRiskText {
-            color: #6e1f1f;
+            color: %30;
             font-size: 8px;
             background: transparent;
         }
         QLabel#statsGoodText {
-            color: #1f3b24;
+            color: %31;
             font-size: 8px;
             background: transparent;
         }
         QLabel#statsSectionTitle {
-            color: #111315;
+            color: %2;
             font-size: 12px;
             font-weight: 800;
             background: transparent;

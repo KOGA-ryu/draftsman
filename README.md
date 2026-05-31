@@ -26,8 +26,13 @@ The shell is intentionally easy for agents to customize without touching C++.
 Repo knowledge can be written into `data/shell_layout.json` as tabs, panels,
 and short review lines, then validated before the app is run.
 
+The low-light palette is controlled by three colors in `data/ui_theme.json`:
+`base`, `surface`, and `accent`. The app derives the rest of the UI network
+from those values.
+
 ```sh
 python3 scripts/validate_shell_layout.py data/shell_layout.json
+python3 scripts/validate_ui_theme.py data/ui_theme.json
 ```
 
 Agent-facing editing notes live in:
@@ -36,6 +41,7 @@ Agent-facing editing notes live in:
 docs/AGENT_EDITING.md
 docs/examples/repo_knowledge_shell_layout.json
 docs/schemas/shell_layout.schema.json
+docs/schemas/ui_theme.schema.json
 ```
 
 ## Build

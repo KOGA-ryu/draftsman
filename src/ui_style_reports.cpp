@@ -5,7 +5,7 @@ namespace dex_ui::style_sheet_sections {
 QString reportAndBadgeQss() {
     return QString(R"(        QFrame#reportEntry {
             background: %16;
-            border: 1px solid #1f2328;
+            border: 1px solid %25;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: %5px;
@@ -27,7 +27,7 @@ QString reportAndBadgeQss() {
             background: transparent;
         }
         QLabel#riskBadge {
-            border: 1px solid #8d969f;
+            border: 1px solid %25;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
             border-top-right-radius: 8px;

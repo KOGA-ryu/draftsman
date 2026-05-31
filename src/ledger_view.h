@@ -24,6 +24,7 @@
 #include "project_registry_spec_page.h"
 #include "shell_layout.h"
 #include "shell_layout_settings_page.h"
+#include "theme_settings_page.h"
 #include "ui_rules.h"
 
 class LedgerView final : public QWidget {
@@ -103,7 +104,9 @@ public:
         std::function<void()> onBack,
         std::function<void(DexProjects::ProjectRegistry, QString)> onSaveAndBack,
         std::function<void(DraftsmanShell::ShellLayout)> onSaveShellLayout,
-        std::function<void(DraftsmanShell::ShellLayout)> onSaveShellLayoutAndBack) {
+        std::function<void(DraftsmanShell::ShellLayout)> onSaveShellLayoutAndBack,
+        std::function<void(dex_ui::UiTheme)> onSaveTheme,
+        std::function<void(dex_ui::UiTheme)> onSaveThemeAndBack) {
         clearLayout(tabLayout_);
         currentTabs_.clear();
         while (pages_->count() > 0) {
@@ -134,6 +137,13 @@ public:
             std::move(onBack),
             std::move(onSaveAndBack)),
             "Project Registry");
+        settingsTabs->addTab(new ThemeSettingsPage(
+            state.uiTheme,
+            std::move(onSaveTheme),
+            onRevert,
+            onBack,
+            std::move(onSaveThemeAndBack)),
+            "Theme");
         pages_->addWidget(settingsTabs);
         pages_->setCurrentIndex(0);
         currentTab_ = "Settings";

@@ -5,6 +5,7 @@
 
 #include "project_registry.h"
 #include "shell_layout.h"
+#include "ui_theme.h"
 
 void DraftsmanWindow::exitSettingsMode() {
     settingsMode_ = false;
@@ -44,6 +45,20 @@ void DraftsmanWindow::saveShellLayoutFromSettings(DraftsmanShell::ShellLayout la
     QString error;
     if (!DraftsmanShell::saveShellLayoutFile(layout, &error)) {
         QMessageBox::warning(this, "Shell Layout", error);
+        return;
+    }
+    settingsMode_ = !exitAfterSave;
+    repoMode_ = true;
+    reloadState();
+}
+
+void DraftsmanWindow::saveUiThemeFromSettings(dex_ui::UiTheme theme, bool exitAfterSave) {
+    if (theme.sourcePath.isEmpty()) {
+        theme.sourcePath = uiThemePath_;
+    }
+    QString error;
+    if (!dex_ui::saveUiThemeFile(theme, &error)) {
+        QMessageBox::warning(this, "UI Theme", error);
         return;
     }
     settingsMode_ = !exitAfterSave;

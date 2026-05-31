@@ -16,11 +16,13 @@
 #include "right_context_panel.h"
 #include "sheet_stack_body.h"
 #include "shell_layout.h"
+#include "ui_rules.h"
 
 void DraftsmanWindow::reloadState() {
     state_ = backend_.deriveState();
     loadProjectRegistryIntoState();
     loadShellLayoutIntoState();
+    loadUiThemeIntoState();
     loadBinderTemplatesIntoState();
     loadProofReceiptIntoState();
     loadPromotionReportIntoState();
@@ -153,6 +155,12 @@ void DraftsmanWindow::refreshViews() {
             },
             [this](DraftsmanShell::ShellLayout layout) {
                 saveShellLayoutFromSettings(std::move(layout), true);
+            },
+            [this](dex_ui::UiTheme theme) {
+                saveUiThemeFromSettings(std::move(theme), false);
+            },
+            [this](dex_ui::UiTheme theme) {
+                saveUiThemeFromSettings(std::move(theme), true);
             });
         rightContext_->setSettingsState(state_, selectedProjectId_);
     } else {
@@ -172,7 +180,7 @@ void DraftsmanWindow::refreshViews() {
             ? QString("Binder")
             : workerDisplayName(state_, selectedWorkerId_);
         if (settingsMode_) {
-            chromeLocationLabel_->setText(QString("%1 / Settings / Shell Layout").arg(projectName));
+            chromeLocationLabel_->setText(QString("%1 / Settings").arg(projectName));
         } else {
             chromeLocationLabel_->setText(QString("%1 / %2 / %3 / %4")
                 .arg(projectName, modeLabel, selectedTopTab_, selectedDetailLens_));
@@ -180,6 +188,10 @@ void DraftsmanWindow::refreshViews() {
     }
     if (appTitleLabel_) {
         appTitleLabel_->setText(state_.shellLayout.appTitle);
+    }
+    if (bottomShelf_) {
+        bottomShelf_->setStyleSheet(QString("background:%1; border-top:1px solid %2;")
+            .arg(dex_ui::colors::hover_bg(), dex_ui::colors::border_strong()));
     }
     setWindowTitle(state_.shellLayout.appTitle);
     body_->relayoutSheets();

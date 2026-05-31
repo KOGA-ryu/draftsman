@@ -6,6 +6,8 @@
 #include <QStringList>
 #include <QWidget>
 
+#include "ui_theme.h"
+
 namespace dex_ui {
 
 struct metrics {
@@ -50,8 +52,18 @@ struct colors {
     static QString risk_split_candidate();
     static QString risk_generated();
     static QString risk_inspect_first();
+    static QString toolbar_bg();
+    static QString border_strong();
+    static QString primary_action_bg();
+    static QString primary_action_text();
+    static QString primary_action_hover();
+    static QString tab_hover_bg();
+    static QString risk_text();
+    static QString good_text();
 };
 
+void set_active_theme(const UiTheme &theme);
+UiTheme active_theme();
 QString app_qss();
 QString app_font_family();
 QFont app_font();

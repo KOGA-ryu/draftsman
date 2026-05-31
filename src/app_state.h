@@ -12,6 +12,7 @@
 #include "repo_proof_receipt_state.h"
 #include "repo_promotion_report_state.h"
 #include "shell_layout.h"
+#include "ui_theme.h"
 
 struct CockpitState {
     int schemaVersion = 1;
@@ -43,4 +44,5 @@ struct CockpitState {
     DexRepoProofReceipt::RepoProofReceiptState repoProofReceipt;
     DexRepoPromotionReport::RepoPromotionReportState repoPromotionReport;
     DraftsmanShell::ShellLayout shellLayout = DraftsmanShell::defaultShellLayout();
+    dex_ui::UiTheme uiTheme = dex_ui::defaultUiTheme();
 };

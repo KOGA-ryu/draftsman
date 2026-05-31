@@ -28,7 +28,8 @@ public:
         settingsLayout->setSpacing(8);
         auto *icon = new QLabel;
         icon->setFixedSize(14, 14);
-        icon->setStyleSheet("background:#fbfcfd; border:1px solid #8d969f; border-radius:3px;");
+        icon->setStyleSheet(QString("background:%1; border:1px solid %2; border-radius:3px;")
+            .arg(dex_ui::colors::selected_bg(), dex_ui::colors::border_strong()));
         settingsLayout->addWidget(icon);
         settingsLayout->addWidget(makeLabel("Settings"));
     }

@@ -28,6 +28,7 @@ DraftsmanWindow::DraftsmanWindow(QString repoRoot, QString binaryPath, QString p
     : backend_(std::move(repoRoot), std::move(binaryPath)),
       projectRegistryPath_(resolveProjectRegistryPath(std::move(projectRegistryPath))),
       shellLayoutPath_(resolveShellLayoutPath()),
+      uiThemePath_(resolveUiThemePath()),
       binderTemplateDirPath_(resolveBinderTemplateDirPath(projectRegistryPath_)),
       proofReceiptPath_(resolveProofReceiptPath(std::move(proofReceiptPath))),
       promotionReportPath_(resolvePromotionReportPath()) {

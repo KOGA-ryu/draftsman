@@ -39,7 +39,8 @@ public:
 
         auto *icon = new QLabel;
         icon->setFixedSize(18, 18);
-        icon->setStyleSheet("background:#eef2f5; border:1px solid #8d969f; border-radius:4px;");
+        icon->setStyleSheet(QString("background:%1; border:1px solid %2; border-radius:4px;")
+            .arg(dex_ui::colors::hover_bg(), dex_ui::colors::border_strong()));
         layout->addWidget(icon);
 
         auto *nameLabel = makeRailElidedLabel(name);
