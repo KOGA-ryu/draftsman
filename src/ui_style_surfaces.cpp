@@ -78,6 +78,13 @@ QString surfaceAndLabelQss() {
             border: 1px solid %14;
             padding: 2px 4px;
         }
+        QPlainTextEdit, QTextEdit, QTextBrowser {
+            background: %1;
+            color: %2;
+            border: 1px solid %14;
+            font-family: "%32";
+            font-size: %33px;
+        }
         QLabel#sectionLabel {
             color: %2;
             font-size: 12px;

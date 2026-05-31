@@ -31,8 +31,17 @@ def main():
             value = data.get(key)
             if not isinstance(value, str) or not COLOR.match(value):
                 errors.append(f"{key} must be a #RRGGBB color")
+        if data.get("theme_mode") not in ("light", "dark", "system"):
+            errors.append("theme_mode must be light, dark, or system")
+        for key in ("ui_font", "code_font"):
+            if not isinstance(data.get(key), str):
+                errors.append(f"{key} must be a string")
+        for key in ("ui_font_size", "code_font_size"):
+            value = data.get(key)
+            if not isinstance(value, int) or value < 9 or value > 28:
+                errors.append(f"{key} must be an integer from 9 to 28")
         for key in data:
-            if key not in ("base", "surface", "accent", "text"):
+            if key not in ("theme_mode", "base", "surface", "accent", "text", "ui_font", "code_font", "ui_font_size", "code_font_size"):
                 errors.append(f"{key} is not a supported theme field")
 
     if errors:

@@ -66,10 +66,17 @@ QColor textColor() {
 
 void set_active_theme(const UiTheme &theme) {
     g_theme = theme;
+    g_theme.themeMode = g_theme.themeMode == "light" || g_theme.themeMode == "dark" || g_theme.themeMode == "system"
+        ? g_theme.themeMode
+        : defaultUiTheme().themeMode;
     g_theme.base = normalizedColor(g_theme.base, defaultUiTheme().base);
     g_theme.surface = normalizedColor(g_theme.surface, defaultUiTheme().surface);
     g_theme.accent = normalizedColor(g_theme.accent, defaultUiTheme().accent);
     g_theme.text = normalizedColor(g_theme.text, defaultUiTheme().text);
+    g_theme.uiFont = g_theme.uiFont.trimmed();
+    g_theme.codeFont = g_theme.codeFont.trimmed();
+    g_theme.uiFontSize = qBound(9, g_theme.uiFontSize, 28);
+    g_theme.codeFontSize = qBound(9, g_theme.codeFontSize, 28);
 }
 
 UiTheme active_theme() {
@@ -103,6 +110,9 @@ QString colors::risk_text() { return hex(blend(textColor(), shiftedHue(accent(),
 QString colors::good_text() { return hex(blend(textColor(), accent(), 0.30)); }
 
 QString app_font_family() {
+    if (!g_theme.uiFont.trimmed().isEmpty()) {
+        return g_theme.uiFont.trimmed();
+    }
     const QStringList installedFamilies = QFontDatabase::families();
     const QStringList preferredFamilies = {
         "Helvetica Neue",
@@ -125,9 +135,38 @@ QString app_font_family() {
     return "Helvetica";
 }
 
+QString code_font_family() {
+    if (!g_theme.codeFont.trimmed().isEmpty()) {
+        return g_theme.codeFont.trimmed();
+    }
+    const QStringList installedFamilies = QFontDatabase::families();
+    const QStringList preferredFamilies = {
+        "Monaspace Neon",
+        "SF Mono",
+        "Menlo",
+        "Monaco",
+        "Courier New",
+    };
+
+    for (const QString &family : preferredFamilies) {
+        if (installedFamilies.contains(family)) {
+            return family;
+        }
+    }
+    return QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
+}
+
+int app_font_size() {
+    return qBound(9, g_theme.uiFontSize, 28);
+}
+
+int code_font_size() {
+    return qBound(9, g_theme.codeFontSize, 28);
+}
+
 QFont app_font() {
     QFont font(app_font_family());
-    font.setPointSize(metrics::font_size_body);
+    font.setPointSize(app_font_size());
     return font;
 }
 

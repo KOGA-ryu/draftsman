@@ -8,6 +8,8 @@
 
 class QLineEdit;
 class QPushButton;
+class QComboBox;
+class QSpinBox;
 
 class ThemeSettingsPage final : public QWidget {
 public:
@@ -30,10 +32,15 @@ private:
     std::function<void()> onRevert_;
     std::function<void()> onBack_;
     std::function<void(dex_ui::UiTheme)> onSaveAndBack_;
+    QComboBox *themeMode_ = nullptr;
     QLineEdit *base_ = nullptr;
     QLineEdit *surface_ = nullptr;
     QLineEdit *accent_ = nullptr;
     QLineEdit *text_ = nullptr;
+    QLineEdit *uiFont_ = nullptr;
+    QLineEdit *codeFont_ = nullptr;
+    QSpinBox *uiFontSize_ = nullptr;
+    QSpinBox *codeFontSize_ = nullptr;
     QPushButton *baseSwatch_ = nullptr;
     QPushButton *surfaceSwatch_ = nullptr;
     QPushButton *accentSwatch_ = nullptr;

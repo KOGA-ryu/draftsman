@@ -66,6 +66,9 @@ void set_active_theme(const UiTheme &theme);
 UiTheme active_theme();
 QString app_qss();
 QString app_font_family();
+QString code_font_family();
+int app_font_size();
+int code_font_size();
 QFont app_font();
 QString risk_kind_token(const QString &kind);
 

@@ -11,10 +11,15 @@ struct UiTheme {
     QString sourcePath;
     bool loaded = false;
     QString error;
+    QString themeMode = "dark";
     QString base = "#141719";
     QString surface = "#24282c";
     QString accent = "#7fa8b8";
     QString text = "#e9eee9";
+    QString uiFont;
+    QString codeFont;
+    int uiFontSize = 13;
+    int codeFontSize = 12;
 };
 
 UiTheme defaultUiTheme();

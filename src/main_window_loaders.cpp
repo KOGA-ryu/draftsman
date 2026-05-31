@@ -57,6 +57,7 @@ void DraftsmanWindow::loadShellLayoutIntoState() {
 void DraftsmanWindow::loadUiThemeIntoState() {
     state_.uiTheme = dex_ui::loadUiThemeFile(uiThemePath_);
     dex_ui::set_active_theme(state_.uiTheme);
+    qApp->setFont(dex_ui::app_font());
     qApp->setStyleSheet(appStyleSheet());
 }
 

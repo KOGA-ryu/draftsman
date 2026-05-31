@@ -3,9 +3,13 @@
   "$id": "https://draftsman.local/ui_theme.schema.json",
   "title": "Draftsman UI Theme",
   "type": "object",
-  "required": ["base", "surface", "accent", "text"],
+  "required": ["theme_mode", "base", "surface", "accent", "text", "ui_font", "code_font", "ui_font_size", "code_font_size"],
   "additionalProperties": false,
   "properties": {
+    "theme_mode": {
+      "type": "string",
+      "enum": ["light", "dark", "system"]
+    },
     "base": {
       "type": "string",
       "pattern": "^#[0-9a-fA-F]{6}$"
@@ -21,6 +25,22 @@
     "text": {
       "type": "string",
       "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "ui_font": {
+      "type": "string"
+    },
+    "code_font": {
+      "type": "string"
+    },
+    "ui_font_size": {
+      "type": "integer",
+      "minimum": 9,
+      "maximum": 28
+    },
+    "code_font_size": {
+      "type": "integer",
+      "minimum": 9,
+      "maximum": 28
     }
   }
 }

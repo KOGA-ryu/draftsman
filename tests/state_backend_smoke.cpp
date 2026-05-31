@@ -163,12 +163,20 @@ private slots:
         QVERIFY(dex_ui::isValidColor(theme.surface));
         QVERIFY(dex_ui::isValidColor(theme.accent));
         QVERIFY(dex_ui::isValidColor(theme.text));
+        QVERIFY(theme.themeMode == "light" || theme.themeMode == "dark" || theme.themeMode == "system");
+        QVERIFY(theme.uiFontSize >= 9);
+        QVERIFY(theme.codeFontSize >= 9);
         const QJsonObject serialized = dex_ui::uiThemeToJson(theme);
-        QCOMPARE(serialized.keys().size(), 4);
+        QCOMPARE(serialized.keys().size(), 9);
+        QVERIFY(serialized.contains("theme_mode"));
         QVERIFY(serialized.contains("base"));
         QVERIFY(serialized.contains("surface"));
         QVERIFY(serialized.contains("accent"));
         QVERIFY(serialized.contains("text"));
+        QVERIFY(serialized.contains("ui_font"));
+        QVERIFY(serialized.contains("code_font"));
+        QVERIFY(serialized.contains("ui_font_size"));
+        QVERIFY(serialized.contains("code_font_size"));
     }
 
     void shellLayoutParsesAgentEditableLines() {

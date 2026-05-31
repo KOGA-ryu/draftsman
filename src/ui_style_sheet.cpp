@@ -17,7 +17,7 @@ QString app_qss() {
     return QString(qss)
         .arg(colors::bg_root())
         .arg(colors::text_primary())
-        .arg(metrics::font_size_body)
+        .arg(app_font_size())
         .arg(metrics::divider_width)
         .arg(metrics::border_radius)
         .arg(colors::bg_rail_mid())
@@ -26,12 +26,12 @@ QString app_qss() {
         .arg(colors::bg_context())
         .arg(colors::bg_rail_light())
         .arg(colors::text_muted())
-        .arg(metrics::font_size_small)
+        .arg(qMax(8, app_font_size() - 2))
         .arg(colors::hover_bg())
         .arg(colors::border_soft())
         .arg(metrics::tab_height)
         .arg(colors::selected_bg())
-        .arg(metrics::font_size_title)
+        .arg(app_font_size() + 2)
         .arg(colors::risk_normal())
         .arg(colors::risk_bulky())
         .arg(colors::risk_split_candidate())
@@ -45,7 +45,9 @@ QString app_qss() {
         .arg(colors::primary_action_hover())
         .arg(colors::tab_hover_bg())
         .arg(colors::risk_text())
-        .arg(colors::good_text());
+        .arg(colors::good_text())
+        .arg(code_font_family())
+        .arg(code_font_size());
 }
 
 } // namespace dex_ui

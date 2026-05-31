@@ -1,12 +1,14 @@
 #include "theme_settings_page.h"
 
 #include <QColorDialog>
+#include <QComboBox>
 #include <QFormLayout>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSpinBox>
 #include <QVBoxLayout>
 
 #include "binder_page_helpers.h"
@@ -22,6 +24,14 @@ QPushButton *makeSwatch(const QString &tooltip) {
     button->setToolTip(tooltip);
     button->setObjectName("statsContextAction");
     return button;
+}
+
+QSpinBox *makeFontSizeSpinBox(int value) {
+    auto *spin = new QSpinBox;
+    spin->setRange(9, 28);
+    spin->setValue(value);
+    spin->setSuffix(" px");
+    return spin;
 }
 
 void setSwatch(QPushButton *button, const QString &color) {
@@ -62,10 +72,20 @@ ThemeSettingsPage::ThemeSettingsPage(
     auto *section = DexBinderPages::makeStatsSection("ui theme");
     auto *sectionLayout = static_cast<QVBoxLayout *>(section->layout());
 
+    themeMode_ = new QComboBox;
+    themeMode_->addItem("Dark", "dark");
+    themeMode_->addItem("Light", "light");
+    themeMode_->addItem("System", "system");
+    const int selectedMode = themeMode_->findData(theme_.themeMode);
+    themeMode_->setCurrentIndex(selectedMode >= 0 ? selectedMode : 0);
     base_ = new QLineEdit(dex_ui::normalizedColor(theme_.base, dex_ui::defaultUiTheme().base));
     surface_ = new QLineEdit(dex_ui::normalizedColor(theme_.surface, dex_ui::defaultUiTheme().surface));
     accent_ = new QLineEdit(dex_ui::normalizedColor(theme_.accent, dex_ui::defaultUiTheme().accent));
     text_ = new QLineEdit(dex_ui::normalizedColor(theme_.text, dex_ui::defaultUiTheme().text));
+    uiFont_ = new QLineEdit(theme_.uiFont);
+    codeFont_ = new QLineEdit(theme_.codeFont);
+    uiFontSize_ = makeFontSizeSpinBox(theme_.uiFontSize);
+    codeFontSize_ = makeFontSizeSpinBox(theme_.codeFontSize);
     baseSwatch_ = makeSwatch("Choose base/background color");
     surfaceSwatch_ = makeSwatch("Choose surface/panel color");
     accentSwatch_ = makeSwatch("Choose accent/selection color");
@@ -74,10 +94,15 @@ ThemeSettingsPage::ThemeSettingsPage(
     auto *form = new QFormLayout;
     form->setContentsMargins(0, 4, 0, 0);
     form->setSpacing(8);
-    form->addRow("Base", makeColorRow(base_, baseSwatch_));
+    form->addRow("Mode", themeMode_);
+    form->addRow("Background", makeColorRow(base_, baseSwatch_));
     form->addRow("Surface", makeColorRow(surface_, surfaceSwatch_));
     form->addRow("Accent", makeColorRow(accent_, accentSwatch_));
-    form->addRow("Text", makeColorRow(text_, textSwatch_));
+    form->addRow("Text / foreground", makeColorRow(text_, textSwatch_));
+    form->addRow("UI font", uiFont_);
+    form->addRow("Code font", codeFont_);
+    form->addRow("UI font size", uiFontSize_);
+    form->addRow("Code font size", codeFontSize_);
     sectionLayout->addLayout(form);
     outer->addWidget(section);
 
@@ -134,10 +159,15 @@ dex_ui::UiTheme ThemeSettingsPage::collectTheme() const {
     dex_ui::UiTheme next;
     next.sourcePath = theme_.sourcePath;
     next.loaded = true;
+    next.themeMode = themeMode_->currentData().toString();
     next.base = dex_ui::normalizedColor(base_->text(), dex_ui::defaultUiTheme().base);
     next.surface = dex_ui::normalizedColor(surface_->text(), dex_ui::defaultUiTheme().surface);
     next.accent = dex_ui::normalizedColor(accent_->text(), dex_ui::defaultUiTheme().accent);
     next.text = dex_ui::normalizedColor(text_->text(), dex_ui::defaultUiTheme().text);
+    next.uiFont = uiFont_->text().trimmed();
+    next.codeFont = codeFont_->text().trimmed();
+    next.uiFontSize = uiFontSize_->value();
+    next.codeFontSize = codeFontSize_->value();
     return next;
 }
 

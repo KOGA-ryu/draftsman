@@ -26,8 +26,9 @@ The shell is intentionally easy for agents to customize without touching C++.
 Repo knowledge can be written into `data/shell_layout.json` as tabs, panels,
 and short review lines, then validated before the app is run.
 
-The low-light palette is controlled by four colors in `data/ui_theme.json`:
-`base`, `surface`, `accent`, and `text`. The app derives the rest of the UI
+The low-light palette and font controls live in `data/ui_theme.json`:
+`theme_mode`, `base`, `surface`, `accent`, `text`, `ui_font`, `code_font`,
+`ui_font_size`, and `code_font_size`. The app derives the rest of the UI
 network from those values.
 
 ```sh
