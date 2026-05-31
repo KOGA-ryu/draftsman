@@ -20,7 +20,7 @@
 
 namespace {
 
-void addBlankContextPanel(QVBoxLayout *layout, const QString &title, int minHeight = 72) {
+void addBlankContextPanel(QVBoxLayout *layout, const QString &title, const QStringList &lines, int minHeight = 72) {
     auto *panel = new QFrame;
     panel->setObjectName("statsSubtleSection");
     panel->setMinimumHeight(minHeight);
@@ -28,6 +28,11 @@ void addBlankContextPanel(QVBoxLayout *layout, const QString &title, int minHeig
     panelLayout->setContentsMargins(8, 6, 8, 6);
     panelLayout->setSpacing(3);
     panelLayout->addWidget(makeLabel(title, "sectionLabel"));
+    for (const QString &line : lines) {
+        auto *label = makeLabel(line, "smallLabel");
+        label->setWordWrap(true);
+        panelLayout->addWidget(label);
+    }
     panelLayout->addStretch(1);
     layout->addWidget(panel);
 }
@@ -76,7 +81,7 @@ void RightContextPanel::setState(
             const QVector<DraftsmanShell::ShellPanel> panels =
                 DraftsmanShell::enabledInspectorPanels(state.shellLayout, selectedTopTab, selectedDetailLens);
             for (const DraftsmanShell::ShellPanel &panel : panels) {
-                addBlankContextPanel(contentLayout_, panel.label, panel.minHeight);
+                addBlankContextPanel(contentLayout_, panel.label, panel.lines, panel.minHeight);
             }
             contentLayout_->addStretch(1);
             return;

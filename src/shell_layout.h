@@ -26,6 +26,7 @@ struct ShellPanel {
     QString id;
     QString label;
     QString tab;
+    QStringList lines;
     int minHeight = 96;
     bool subtle = false;
     bool enabled = true;

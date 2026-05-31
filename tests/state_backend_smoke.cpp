@@ -153,6 +153,47 @@ private slots:
         QVERIFY(!DraftsmanShell::enabledInspectorPanels(layout, "Overview", "Dashboard").isEmpty());
     }
 
+    void shellLayoutParsesAgentEditableLines() {
+        const QJsonDocument document(QJsonObject{
+            {"app_title", "Agent Filled Binder"},
+            {"left_rail", QJsonObject{{"sections", QJsonArray{QJsonObject{
+                {"id", "projects"},
+                {"title", "Projects"},
+                {"items", QJsonArray{QJsonObject{{"id", "sample"}, {"label", "Sample"}}}},
+            }}}}},
+            {"tabs", QJsonArray{QJsonObject{{"id", "overview"}, {"label", "Overview"}, {"enabled", true}}}},
+            {"panels", QJsonArray{QJsonObject{
+                {"id", "repo_purpose"},
+                {"label", "Repo Purpose"},
+                {"tab", "Overview"},
+                {"lines", QJsonArray{"fact one", "fact two"}},
+                {"enabled", true},
+            }}},
+            {"inspector", QJsonObject{{"panels", QJsonArray{QJsonObject{
+                {"id", "agent_receipt"},
+                {"label", "Agent Receipt"},
+                {"tab", "*"},
+                {"text", "session key: sample\nsource: scan"},
+                {"enabled", true},
+            }}}}},
+        });
+
+        const DraftsmanShell::ShellLayout layout = DraftsmanShell::parseShellLayoutDocument(document);
+        const QVector<DraftsmanShell::ShellPanel> panels =
+            DraftsmanShell::enabledPanelsForTab(layout, "Overview");
+        const QVector<DraftsmanShell::ShellPanel> inspector =
+            DraftsmanShell::enabledInspectorPanels(layout, "Overview", "Dashboard");
+
+        QCOMPARE(layout.appTitle, QString("Agent Filled Binder"));
+        QCOMPARE(panels.size(), 1);
+        QCOMPARE(panels.first().lines, QStringList({"fact one", "fact two"}));
+        QCOMPARE(inspector.size(), 1);
+        QCOMPARE(inspector.first().lines, QStringList({"session key: sample", "source: scan"}));
+
+        const QJsonObject serialized = DraftsmanShell::shellLayoutToJson(layout);
+        QCOMPARE(serialized.value("panels").toArray().first().toObject().value("lines").toArray().size(), 2);
+    }
+
     void binderTemplateParserHandlesMissingOptionalsAndUnknownFields() {
         const QJsonDocument document(QJsonObject{
             {"template_id", "minimal_template"},

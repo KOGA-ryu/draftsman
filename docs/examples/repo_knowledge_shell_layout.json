@@ -1,0 +1,87 @@
+{
+  "app_title": "Draftsman - Sample Repo Binder",
+  "left_rail": {
+    "sections": [
+      {
+        "id": "projects",
+        "title": "Projects",
+        "enabled": true,
+        "items": [
+          { "id": "sample_repo", "label": "Sample repo", "enabled": true }
+        ]
+      },
+      {
+        "id": "workflow",
+        "title": "Workflow",
+        "enabled": true,
+        "items": [
+          { "id": "scratch", "label": "Scratch", "enabled": true },
+          { "id": "final", "label": "Final", "enabled": true }
+        ]
+      }
+    ]
+  },
+  "tabs": [
+    { "id": "overview", "label": "Overview", "enabled": true },
+    { "id": "architecture", "label": "Architecture", "enabled": true },
+    { "id": "commands", "label": "Commands", "enabled": true },
+    { "id": "reviews", "label": "Reviews", "enabled": true }
+  ],
+  "panels": [
+    {
+      "id": "repo_purpose",
+      "label": "Repo Purpose",
+      "tab": "Overview",
+      "lines": [
+        "Purpose: concise description collected from README and source map.",
+        "Authority: human-reviewed facts only; speculative notes stay in scratch."
+      ],
+      "min_height": 96,
+      "subtle": true,
+      "enabled": true
+    },
+    {
+      "id": "important_paths",
+      "label": "Important Paths",
+      "tab": "Architecture",
+      "lines": [
+        "src/: reusable application source.",
+        "data/: human and agent editable binder configuration.",
+        "docs/proof/: visual proof receipts."
+      ],
+      "min_height": 120,
+      "subtle": false,
+      "enabled": true
+    },
+    {
+      "id": "verification",
+      "label": "Verification Commands",
+      "tab": "Commands",
+      "lines": [
+        "cmake -S . -B build",
+        "cmake --build build",
+        "ctest --test-dir build --output-on-failure"
+      ],
+      "min_height": 108,
+      "subtle": true,
+      "enabled": true
+    }
+  ],
+  "inspector": {
+    "panels": [
+      {
+        "id": "agent_receipt",
+        "label": "Agent Receipt",
+        "tab": "*",
+        "lines": [
+          "source: repo scan packet",
+          "confidence: reviewed fields only",
+          "session key: fill from agent run"
+        ],
+        "min_height": 96,
+        "subtle": true,
+        "enabled": true
+      }
+    ]
+  }
+}

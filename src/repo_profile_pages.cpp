@@ -115,9 +115,13 @@ void addRepoProfilePage(
     }
 }
 
-void addBlankShellPanel(QVBoxLayout *layout, const QString &title, int minHeight, bool subtle = false) {
+void addBlankShellPanel(QVBoxLayout *layout, const QString &title, const QStringList &lines, int minHeight, bool subtle = false) {
     auto *panel = makeStatsSection(title, subtle);
     panel->setMinimumHeight(minHeight);
+    auto *panelLayout = static_cast<QVBoxLayout *>(panel->layout());
+    for (const QString &line : lines) {
+        panelLayout->addWidget(makeStatsText(line));
+    }
     layout->addWidget(panel);
 }
 
@@ -150,11 +154,11 @@ QWidget *buildRepoBlankPage(
         const QVector<DraftsmanShell::ShellPanel> panels =
             DraftsmanShell::enabledPanelsForTab(state.shellLayout, topTab);
         if (panels.isEmpty()) {
-            addBlankShellPanel(layout, topTab + " / " + detailLens, 96, true);
+            addBlankShellPanel(layout, topTab + " / " + detailLens, {}, 96, true);
             return;
         }
         for (const DraftsmanShell::ShellPanel &panel : panels) {
-            addBlankShellPanel(layout, panel.label, panel.minHeight, panel.subtle);
+            addBlankShellPanel(layout, panel.label, panel.lines, panel.minHeight, panel.subtle);
         }
     });
 }

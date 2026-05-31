@@ -27,6 +27,8 @@ The native shell is organized by UI responsibility. Keep new work in the smalles
 - `project_registry_parse.cpp`: tolerant project registry JSON parsing.
 - `project_registry_store.cpp`: project registry file loading.
 - `project_registry_lookup.cpp`: registry lookup and display helpers.
+- `shell_layout.*`: agent-editable shell layout model for tabs, rail sections, blank panels, inspector panels, and review lines.
+- `shell_layout_settings_page.*`: human settings UI for adding, removing, renaming, enabling, and filling shell layout records.
 - `repo_diff_scan_state.*`: repo diff-scan view state and parser.
 - `repo_contract_check_state.*`: repo contract-check view state and parser.
 - `repo_proof_receipt_state.*`: repo proof receipt view state, parser, and loader.
@@ -75,6 +77,7 @@ The native shell is organized by UI responsibility. Keep new work in the smalles
 Rules:
 
 - Do not put backend calls inside page widgets; route them through `RustCockpitBackend` and `CockpitState`.
+- Do not put project-specific blank-shell content in C++; put it in `data/shell_layout.json` or a promoted copy validated by `scripts/validate_shell_layout.py`.
 - Do not add per-project C++ pages. Put repo-specific layout in `data/binder_templates/*.json`; keep only reusable repo subject rendering in `repo_<subject>_pages.cpp`.
 - Keep right context content out of `right_context_panel.*`; agent context stays blank/record-backed through `agent_empty_state.*`, and repo content belongs in `repo_context_renderer.*`.
 - Keep agent binder pages blank/record-backed unless real typed records exist; do not recreate mock dashboard/detail files.

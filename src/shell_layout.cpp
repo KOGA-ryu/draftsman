@@ -25,6 +25,34 @@ int readInt(const QJsonObject &object, const char *key, int fallback) {
     return value.isDouble() ? value.toInt() : fallback;
 }
 
+QStringList readStringList(const QJsonObject &object, const char *key) {
+    QStringList values;
+    const QJsonValue value = object.value(QString::fromLatin1(key));
+    if (value.isString()) {
+        for (QString line : value.toString().split('\n')) {
+            line = line.trimmed();
+            if (!line.isEmpty()) {
+                values.push_back(line);
+            }
+        }
+        return values;
+    }
+    for (const QJsonValue &entry : value.toArray()) {
+        if (entry.isString() && !entry.toString().trimmed().isEmpty()) {
+            values.push_back(entry.toString().trimmed());
+        }
+    }
+    return values;
+}
+
+QStringList readPanelLines(const QJsonObject &object) {
+    QStringList lines = readStringList(object, "lines");
+    if (lines.isEmpty()) {
+        lines = readStringList(object, "text");
+    }
+    return lines;
+}
+
 ShellItem parseItem(const QJsonObject &object) {
     ShellItem item;
     item.id = readString(object, "id");
@@ -38,6 +66,7 @@ ShellPanel parsePanel(const QJsonObject &object) {
     panel.id = readString(object, "id");
     panel.label = readString(object, "label", panel.id);
     panel.tab = readString(object, "tab", "Overview");
+    panel.lines = readPanelLines(object);
     panel.minHeight = readInt(object, "min_height", 96);
     panel.subtle = readBool(object, "subtle", false);
     panel.enabled = readBool(object, "enabled", true);
@@ -53,10 +82,15 @@ QJsonObject itemToJson(const ShellItem &item) {
 }
 
 QJsonObject panelToJson(const ShellPanel &panel) {
+    QJsonArray lines;
+    for (const QString &line : panel.lines) {
+        lines.push_back(line);
+    }
     return QJsonObject{
         {"id", panel.id},
         {"label", panel.label},
         {"tab", panel.tab},
+        {"lines", lines},
         {"min_height", panel.minHeight},
         {"subtle", panel.subtle},
         {"enabled", panel.enabled},
@@ -84,17 +118,17 @@ ShellLayout defaultShellLayout() {
         {"timeline", "Timeline", true},
     };
     layout.panels = {
-        {"project_overview", "Project Overview", "Overview", 96, true, true},
-        {"pinned_artifacts", "Pinned Artifacts", "Overview", 132, false, true},
-        {"review_queue", "Review Queue", "Overview", 112, true, true},
-        {"session_notes", "Session Notes", "Overview", 112, false, true},
-        {"decisions", "Decisions", "Overview", 88, true, true},
+        {"project_overview", "Project Overview", "Overview", {}, 96, true, true},
+        {"pinned_artifacts", "Pinned Artifacts", "Overview", {}, 132, false, true},
+        {"review_queue", "Review Queue", "Overview", {}, 112, true, true},
+        {"session_notes", "Session Notes", "Overview", {}, 112, false, true},
+        {"decisions", "Decisions", "Overview", {}, 88, true, true},
     };
     layout.inspectorPanels = {
-        {"inspector", "Inspector", "*", 72, true, true},
-        {"selection", "Selection", "*", 72, true, true},
-        {"properties", "Properties", "*", 86, true, true},
-        {"actions", "Actions", "*", 64, true, true},
+        {"inspector", "Inspector", "*", {}, 72, true, true},
+        {"selection", "Selection", "*", {}, 72, true, true},
+        {"properties", "Properties", "*", {}, 86, true, true},
+        {"actions", "Actions", "*", {}, 64, true, true},
     };
     return layout;
 }

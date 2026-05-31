@@ -22,6 +22,22 @@ The first screen keeps only the reusable UI structure:
 - right inspector panels
 - Settings entry point
 
+The shell is intentionally easy for agents to customize without touching C++.
+Repo knowledge can be written into `data/shell_layout.json` as tabs, panels,
+and short review lines, then validated before the app is run.
+
+```sh
+python3 scripts/validate_shell_layout.py data/shell_layout.json
+```
+
+Agent-facing editing notes live in:
+
+```text
+docs/AGENT_EDITING.md
+docs/examples/repo_knowledge_shell_layout.json
+docs/schemas/shell_layout.schema.json
+```
+
 ## Build
 
 ```sh

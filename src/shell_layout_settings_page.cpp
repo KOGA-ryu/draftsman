@@ -44,6 +44,22 @@ int cellInt(const QTableWidget *table, int row, int column, int fallback) {
     return ok ? value : fallback;
 }
 
+QString joinLines(const QStringList &lines) {
+    return lines.join(" | ");
+}
+
+QStringList splitLines(QString value) {
+    value.replace('\n', '|');
+    QStringList lines;
+    for (QString line : value.split('|', Qt::SkipEmptyParts)) {
+        line = line.trimmed();
+        if (!line.isEmpty()) {
+            lines.push_back(line);
+        }
+    }
+    return lines;
+}
+
 QTableWidget *makeTable(const QStringList &headers, int minHeight) {
     auto *table = new QTableWidget(0, headers.size());
     table->setHorizontalHeaderLabels(headers);
@@ -122,13 +138,13 @@ ShellLayoutSettingsPage::ShellLayoutSettingsPage(
     for (const DraftsmanShell::ShellItem &tab : layout_.tabs) {
         addRow(tabs_, {tab.id, tab.label, tab.enabled ? "true" : "false"});
     }
-    panels_ = makeTable({"id", "label", "tab", "min height", "subtle", "enabled"}, 150);
+    panels_ = makeTable({"id", "label", "tab", "min height", "subtle", "enabled", "lines"}, 150);
     for (const DraftsmanShell::ShellPanel &panel : layout_.panels) {
-        addRow(panels_, {panel.id, panel.label, panel.tab, QString::number(panel.minHeight), panel.subtle ? "true" : "false", panel.enabled ? "true" : "false"});
+        addRow(panels_, {panel.id, panel.label, panel.tab, QString::number(panel.minHeight), panel.subtle ? "true" : "false", panel.enabled ? "true" : "false", joinLines(panel.lines)});
     }
-    inspectorPanels_ = makeTable({"id", "label", "tab", "min height", "subtle", "enabled"}, 130);
+    inspectorPanels_ = makeTable({"id", "label", "tab", "min height", "subtle", "enabled", "lines"}, 130);
     for (const DraftsmanShell::ShellPanel &panel : layout_.inspectorPanels) {
-        addRow(inspectorPanels_, {panel.id, panel.label, panel.tab, QString::number(panel.minHeight), panel.subtle ? "true" : "false", panel.enabled ? "true" : "false"});
+        addRow(inspectorPanels_, {panel.id, panel.label, panel.tab, QString::number(panel.minHeight), panel.subtle ? "true" : "false", panel.enabled ? "true" : "false", joinLines(panel.lines)});
     }
 
     const QVector<QPair<QString, QTableWidget *>> tables = {
@@ -208,10 +224,10 @@ DraftsmanShell::ShellLayout ShellLayoutSettingsPage::collectLayout() const {
         next.tabs.push_back({cellText(tabs_, row, 0), cellText(tabs_, row, 1), cellBool(tabs_, row, 2, true)});
     }
     for (int row = 0; row < panels_->rowCount(); ++row) {
-        next.panels.push_back({cellText(panels_, row, 0), cellText(panels_, row, 1), cellText(panels_, row, 2), cellInt(panels_, row, 3, 96), cellBool(panels_, row, 4, false), cellBool(panels_, row, 5, true)});
+        next.panels.push_back({cellText(panels_, row, 0), cellText(panels_, row, 1), cellText(panels_, row, 2), splitLines(cellText(panels_, row, 6)), cellInt(panels_, row, 3, 96), cellBool(panels_, row, 4, false), cellBool(panels_, row, 5, true)});
     }
     for (int row = 0; row < inspectorPanels_->rowCount(); ++row) {
-        next.inspectorPanels.push_back({cellText(inspectorPanels_, row, 0), cellText(inspectorPanels_, row, 1), cellText(inspectorPanels_, row, 2), cellInt(inspectorPanels_, row, 3, 72), cellBool(inspectorPanels_, row, 4, true), cellBool(inspectorPanels_, row, 5, true)});
+        next.inspectorPanels.push_back({cellText(inspectorPanels_, row, 0), cellText(inspectorPanels_, row, 1), cellText(inspectorPanels_, row, 2), splitLines(cellText(inspectorPanels_, row, 6)), cellInt(inspectorPanels_, row, 3, 72), cellBool(inspectorPanels_, row, 4, true), cellBool(inspectorPanels_, row, 5, true)});
     }
     return next;
 }

@@ -33,18 +33,18 @@
     { "id": "timeline", "label": "Timeline", "enabled": true }
   ],
   "panels": [
-    { "id": "project_overview", "label": "Project Overview", "tab": "Overview", "min_height": 96, "subtle": true, "enabled": true },
-    { "id": "pinned_artifacts", "label": "Pinned Artifacts", "tab": "Overview", "min_height": 132, "subtle": false, "enabled": true },
-    { "id": "review_queue", "label": "Review Queue", "tab": "Overview", "min_height": 112, "subtle": true, "enabled": true },
-    { "id": "session_notes", "label": "Session Notes", "tab": "Overview", "min_height": 112, "subtle": false, "enabled": true },
-    { "id": "decisions", "label": "Decisions", "tab": "Overview", "min_height": 88, "subtle": true, "enabled": true }
+    { "id": "project_overview", "label": "Project Overview", "tab": "Overview", "lines": [], "min_height": 96, "subtle": true, "enabled": true },
+    { "id": "pinned_artifacts", "label": "Pinned Artifacts", "tab": "Overview", "lines": [], "min_height": 132, "subtle": false, "enabled": true },
+    { "id": "review_queue", "label": "Review Queue", "tab": "Overview", "lines": [], "min_height": 112, "subtle": true, "enabled": true },
+    { "id": "session_notes", "label": "Session Notes", "tab": "Overview", "lines": [], "min_height": 112, "subtle": false, "enabled": true },
+    { "id": "decisions", "label": "Decisions", "tab": "Overview", "lines": [], "min_height": 88, "subtle": true, "enabled": true }
   ],
   "inspector": {
     "panels": [
-      { "id": "inspector", "label": "Inspector", "tab": "*", "min_height": 72, "subtle": true, "enabled": true },
-      { "id": "selection", "label": "Selection", "tab": "*", "min_height": 72, "subtle": true, "enabled": true },
-      { "id": "properties", "label": "Properties", "tab": "*", "min_height": 86, "subtle": true, "enabled": true },
-      { "id": "actions", "label": "Actions", "tab": "*", "min_height": 64, "subtle": true, "enabled": true }
+      { "id": "inspector", "label": "Inspector", "tab": "*", "lines": [], "min_height": 72, "subtle": true, "enabled": true },
+      { "id": "selection", "label": "Selection", "tab": "*", "lines": [], "min_height": 72, "subtle": true, "enabled": true },
+      { "id": "properties", "label": "Properties", "tab": "*", "lines": [], "min_height": 86, "subtle": true, "enabled": true },
+      { "id": "actions", "label": "Actions", "tab": "*", "lines": [], "min_height": 64, "subtle": true, "enabled": true }
     ]
   }
 }
