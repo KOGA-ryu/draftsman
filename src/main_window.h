@@ -30,6 +30,7 @@ public:
 
 private:
     static QString resolveProjectRegistryPath(const QString &requestedPath);
+    static QString resolveShellLayoutPath();
     static QString resolveProofReceiptPath(const QString &requestedPath);
     static QString resolveBinderTemplateDirPath(const QString &projectRegistryPath);
     static QString resolvePromotionReportPath();
@@ -38,6 +39,7 @@ private:
     void buildBody();
     void reloadState();
     void loadProjectRegistryIntoState();
+    void loadShellLayoutIntoState();
     void loadBinderTemplatesIntoState();
     void loadProofReceiptIntoState();
     void loadPromotionReportIntoState();
@@ -47,6 +49,7 @@ private:
     void syncSelectedWorkerToSelectedProject();
     void exitSettingsMode();
     void saveProjectRegistryFromSettings(DexProjects::ProjectRegistry registry, const QString &selectedProjectId, bool exitAfterSave = false);
+    void saveShellLayoutFromSettings(DraftsmanShell::ShellLayout layout, bool exitAfterSave = false);
     void revertProjectRegistrySettings();
     void addGradeRecord();
     void addReviewVerdict(const QString &decision);
@@ -62,6 +65,7 @@ private:
     QString selectedWorkerId_;
     QString selectedProjectId_;
     QString projectRegistryPath_;
+    QString shellLayoutPath_;
     QString binderTemplateDirPath_;
     QString proofReceiptPath_;
     QString promotionReportPath_;
@@ -76,6 +80,7 @@ private:
     RightContextPanel *rightContext_ = nullptr;
     QToolBar *bottomHost_ = nullptr;
     QLabel *bottomShelf_ = nullptr;
+    QLabel *appTitleLabel_ = nullptr;
     QLabel *chromeLocationLabel_ = nullptr;
     QToolButton *railToggle_ = nullptr;
     QToolButton *bottomToggle_ = nullptr;

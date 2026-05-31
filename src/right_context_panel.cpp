@@ -15,6 +15,7 @@
 #include "repo_binder_template.h"
 #include "repo_context_renderer.h"
 #include "right_context_render_helpers.h"
+#include "shell_layout.h"
 #include "ui_rules.h"
 
 namespace {
@@ -72,10 +73,11 @@ void RightContextPanel::setState(
         const QVector<DexProjects::ProjectRegistryEntry> projects = registryProjectsForState(state);
         const DexProjects::ProjectRegistryEntry *selected = DexProjects::findProjectById(projects, selectedProjectId);
         if (!selected) {
-            addBlankContextPanel(contentLayout_, "inspector");
-            addBlankContextPanel(contentLayout_, selectedTopTab + " / " + selectedDetailLens);
-            addBlankContextPanel(contentLayout_, "properties", 86);
-            addBlankContextPanel(contentLayout_, "actions", 64);
+            const QVector<DraftsmanShell::ShellPanel> panels =
+                DraftsmanShell::enabledInspectorPanels(state.shellLayout, selectedTopTab, selectedDetailLens);
+            for (const DraftsmanShell::ShellPanel &panel : panels) {
+                addBlankContextPanel(contentLayout_, panel.label, panel.minHeight);
+            }
             contentLayout_->addStretch(1);
             return;
         }
@@ -127,8 +129,9 @@ void RightContextPanel::setSettingsState(const CockpitState &state, const QStrin
     clearLayout(contentLayout_);
 
     DexRightContext::addContextSection(contentLayout_, "settings");
-    DexRightContext::addWrappedLine(contentLayout_, "screen                         project registry spec");
+    DexRightContext::addWrappedLine(contentLayout_, "screen                         shell layout / project registry");
     DexRightContext::addWrappedLine(contentLayout_, "save behavior                  explicit save only");
+    DexRightContext::addWrappedLine(contentLayout_, "shell layout                   " + state.shellLayout.sourcePath);
     DexRightContext::addWrappedLine(contentLayout_, "registry                       " + (state.projectRegistrySource.isEmpty() ? QString("unknown") : state.projectRegistrySource));
     DexRightContext::addWrappedLine(contentLayout_, "loaded                         " + QString(state.projectRegistryLoaded ? "yes" : "no"));
     if (!state.projectRegistryError.isEmpty()) {
@@ -147,12 +150,12 @@ void RightContextPanel::setSettingsState(const CockpitState &state, const QStrin
     }
 
     DexRightContext::addContextSection(contentLayout_, "boundaries");
-    DexRightContext::addWrappedLine(contentLayout_, "writes                         projects.json only");
+    DexRightContext::addWrappedLine(contentLayout_, "writes                         shell_layout.json or projects.json");
     DexRightContext::addWrappedLine(contentLayout_, "jsonl                          not touched");
     DexRightContext::addWrappedLine(contentLayout_, "backend scanner                not run by settings");
     DexRightContext::addWrappedLine(contentLayout_, "worker execution               not allowed");
     DexRightContext::addContextSection(contentLayout_, "navigation");
     DexRightContext::addWrappedLine(contentLayout_, "Back                           returns to repo binder without saving");
-    DexRightContext::addWrappedLine(contentLayout_, "Save and Back                  writes projects.json, then returns");
+    DexRightContext::addWrappedLine(contentLayout_, "Save and Back                  writes active settings file, then returns");
     contentLayout_->addStretch(1);
 }

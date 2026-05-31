@@ -11,6 +11,7 @@
 #include "app_state_helpers.h"
 #include "project_rail_rows.h"
 #include "render_helpers.h"
+#include "shell_layout.h"
 #include "ui_rules.h"
 
 namespace {
@@ -106,8 +107,22 @@ void ProjectRail::setState(
     const QVector<DexProjects::ProjectRegistryEntry> projects = registryProjectsForState(state);
 
     if (projects.isEmpty()) {
-        listLayout_->addWidget(makeLabel("Projects", "sectionLabel"));
-        listLayout_->addWidget(makeEmptyRailPanel("Project slot"));
+        for (const DraftsmanShell::RailSection &section : state.shellLayout.railSections) {
+            if (!section.enabled) {
+                continue;
+            }
+            listLayout_->addWidget(makeLabel(section.title, "sectionLabel"));
+            bool added = false;
+            for (const DraftsmanShell::ShellItem &item : section.items) {
+                if (item.enabled) {
+                    listLayout_->addWidget(makeEmptyRailPanel(item.label));
+                    added = true;
+                }
+            }
+            if (!added) {
+                listLayout_->addWidget(makeEmptyRailPanel("Slot"));
+            }
+        }
         if (!repoMode) {
             listLayout_->addWidget(makeLabel("Workers", "sectionLabel"));
             listLayout_->addWidget(makeEmptyRailPanel("Worker slot"));

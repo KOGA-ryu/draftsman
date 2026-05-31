@@ -11,6 +11,7 @@
 #include "repo_diff_scan_state.h"
 #include "repo_proof_receipt_state.h"
 #include "repo_promotion_report_state.h"
+#include "shell_layout.h"
 
 struct CockpitState {
     int schemaVersion = 1;
@@ -41,4 +42,5 @@ struct CockpitState {
     DexRepoContractCheck::RepoContractCheckState repoContractCheck;
     DexRepoProofReceipt::RepoProofReceiptState repoProofReceipt;
     DexRepoPromotionReport::RepoPromotionReportState repoPromotionReport;
+    DraftsmanShell::ShellLayout shellLayout = DraftsmanShell::defaultShellLayout();
 };

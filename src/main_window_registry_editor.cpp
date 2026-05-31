@@ -4,6 +4,7 @@
 #include <QToolButton>
 
 #include "project_registry.h"
+#include "shell_layout.h"
 
 void DraftsmanWindow::exitSettingsMode() {
     settingsMode_ = false;
@@ -31,6 +32,20 @@ void DraftsmanWindow::saveProjectRegistryFromSettings(DexProjects::ProjectRegist
         return;
     }
     selectedProjectId_ = selectedProjectId;
+    settingsMode_ = !exitAfterSave;
+    repoMode_ = true;
+    reloadState();
+}
+
+void DraftsmanWindow::saveShellLayoutFromSettings(DraftsmanShell::ShellLayout layout, bool exitAfterSave) {
+    if (layout.sourcePath.isEmpty()) {
+        layout.sourcePath = shellLayoutPath_;
+    }
+    QString error;
+    if (!DraftsmanShell::saveShellLayoutFile(layout, &error)) {
+        QMessageBox::warning(this, "Shell Layout", error);
+        return;
+    }
     settingsMode_ = !exitAfterSave;
     repoMode_ = true;
     reloadState();

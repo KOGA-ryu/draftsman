@@ -11,6 +11,7 @@
 #include "project_rail.h"
 #include "right_context_panel.h"
 #include "sheet_stack_body.h"
+#include "shell_layout.h"
 #include <QToolButton>
 #include "ui_rules.h"
 
@@ -26,6 +27,7 @@ constexpr int kMinHeight = dex_ui::metrics::min_height;
 DraftsmanWindow::DraftsmanWindow(QString repoRoot, QString binaryPath, QString projectRegistryPath, QString proofReceiptPath)
     : backend_(std::move(repoRoot), std::move(binaryPath)),
       projectRegistryPath_(resolveProjectRegistryPath(std::move(projectRegistryPath))),
+      shellLayoutPath_(resolveShellLayoutPath()),
       binderTemplateDirPath_(resolveBinderTemplateDirPath(projectRegistryPath_)),
       proofReceiptPath_(resolveProofReceiptPath(std::move(proofReceiptPath))),
       promotionReportPath_(resolvePromotionReportPath()) {
@@ -60,7 +62,8 @@ void DraftsmanWindow::setRightContextVisible(bool visible) {
 }
 
 void DraftsmanWindow::setTopTab(const QString &tabName) {
-    if (topTabsFor(repoMode_).contains(tabName)) {
+    const QStringList tabs = repoMode_ ? DraftsmanShell::enabledTabLabels(state_.shellLayout) : topTabsFor(false);
+    if (tabs.contains(tabName)) {
         settingsMode_ = false;
         selectedTopTab_ = tabName;
         selectedDetailLens_ = detailLensTabsFor(selectedTopTab_, repoMode_).value(0, "Summary");

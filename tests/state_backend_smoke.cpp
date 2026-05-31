@@ -11,6 +11,7 @@
 #include "project_registry.h"
 #include "project_registry_spec_model.h"
 #include "repo_binder_template.h"
+#include "shell_layout.h"
 
 class StateBackendSmoke final : public QObject {
     Q_OBJECT
@@ -138,6 +139,18 @@ private slots:
         QVERIFY2(registry.loaded, qPrintable(registry.error));
         QCOMPARE(registry.projects.size(), 0);
         QCOMPARE(registry.workers.size(), 0);
+    }
+
+    void productionShellLayoutIsCustomizable() {
+        const QString path = QString::fromUtf8(DRAFTSMAN_SOURCE_DIR) + "/data/shell_layout.json";
+        const DraftsmanShell::ShellLayout layout = DraftsmanShell::loadShellLayoutFile(path);
+
+        QVERIFY2(layout.loaded, qPrintable(layout.error));
+        QCOMPARE(layout.appTitle, QString("Draftsman"));
+        QVERIFY(DraftsmanShell::enabledTabLabels(layout).contains("Overview"));
+        QVERIFY(DraftsmanShell::enabledTabLabels(layout).contains("Reviews"));
+        QVERIFY(!DraftsmanShell::enabledPanelsForTab(layout, "Overview").isEmpty());
+        QVERIFY(!DraftsmanShell::enabledInspectorPanels(layout, "Overview", "Dashboard").isEmpty());
     }
 
     void binderTemplateParserHandlesMissingOptionalsAndUnknownFields() {

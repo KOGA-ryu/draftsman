@@ -15,10 +15,12 @@
 #include "project_registry.h"
 #include "right_context_panel.h"
 #include "sheet_stack_body.h"
+#include "shell_layout.h"
 
 void DraftsmanWindow::reloadState() {
     state_ = backend_.deriveState();
     loadProjectRegistryIntoState();
+    loadShellLayoutIntoState();
     loadBinderTemplatesIntoState();
     loadProofReceiptIntoState();
     loadPromotionReportIntoState();
@@ -121,6 +123,13 @@ void DraftsmanWindow::syncSelectedWorkerToSelectedProject() {
 }
 
 void DraftsmanWindow::refreshViews() {
+    if (repoMode_ && !settingsMode_) {
+        const QStringList tabs = DraftsmanShell::enabledTabLabels(state_.shellLayout);
+        if (!tabs.contains(selectedTopTab_)) {
+            selectedTopTab_ = tabs.value(0, "Overview");
+            selectedDetailLens_ = "Dashboard";
+        }
+    }
     projectRail_->setState(state_, selectedWorkerId_, selectedProjectId_, repoMode_, settingsMode_);
     detailLensRail_->setVisible(!settingsMode_);
     if (settingsMode_) {
@@ -138,6 +147,12 @@ void DraftsmanWindow::refreshViews() {
             },
             [this](DexProjects::ProjectRegistry registry, QString projectId) {
                 saveProjectRegistryFromSettings(std::move(registry), projectId, true);
+            },
+            [this](DraftsmanShell::ShellLayout layout) {
+                saveShellLayoutFromSettings(std::move(layout), false);
+            },
+            [this](DraftsmanShell::ShellLayout layout) {
+                saveShellLayoutFromSettings(std::move(layout), true);
             });
         rightContext_->setSettingsState(state_, selectedProjectId_);
     } else {
@@ -157,11 +172,15 @@ void DraftsmanWindow::refreshViews() {
             ? QString("Binder")
             : workerDisplayName(state_, selectedWorkerId_);
         if (settingsMode_) {
-            chromeLocationLabel_->setText(QString("%1 / Settings / Project Spec").arg(projectName));
+            chromeLocationLabel_->setText(QString("%1 / Settings / Shell Layout").arg(projectName));
         } else {
             chromeLocationLabel_->setText(QString("%1 / %2 / %3 / %4")
                 .arg(projectName, modeLabel, selectedTopTab_, selectedDetailLens_));
         }
     }
+    if (appTitleLabel_) {
+        appTitleLabel_->setText(state_.shellLayout.appTitle);
+    }
+    setWindowTitle(state_.shellLayout.appTitle);
     body_->relayoutSheets();
 }

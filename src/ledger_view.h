@@ -6,6 +6,7 @@
 #include <QStackedWidget>
 #include <QString>
 #include <QStringList>
+#include <QTabWidget>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -21,6 +22,8 @@
 #include "repo_binder_template.h"
 #include "repo_binder_pages.h"
 #include "project_registry_spec_page.h"
+#include "shell_layout.h"
+#include "shell_layout_settings_page.h"
 #include "ui_rules.h"
 
 class LedgerView final : public QWidget {
@@ -58,7 +61,7 @@ public:
         const QString &topTab,
         const QString &detailLens,
         bool repoMode) {
-        const QStringList tabs = topTabsFor(repoMode);
+        const QStringList tabs = repoMode ? DraftsmanShell::enabledTabLabels(state.shellLayout) : topTabsFor(false);
         if (currentTabs_ != tabs) {
             rebuildTabs(tabs);
         }
@@ -71,24 +74,8 @@ public:
         }
 
         if (repoMode) {
-            const QVector<DexProjects::ProjectRegistryEntry> projects = registryProjectsForState(state);
-            const DexProjects::ProjectRegistryEntry *selected = DexProjects::findProjectById(projects, selectedProjectId);
-            if (!selected) {
-                for (const QString &tab : tabs) {
-                    pages_->addWidget(DexBinderPages::buildRepoBlankPage(state, tab, detailLens));
-                }
-            } else {
-                const DexProjects::ProjectRegistryEntry project = *selected;
-                const DexRepoBinderTemplate::BinderTemplate binderTemplate =
-                    DexRepoBinderTemplate::resolveTemplateForProject(state.binderTemplateStore, project.binderTemplate);
-                pages_->addWidget(DexBinderPages::buildRepoProfilePage(state, workerId, project, detailLens, binderTemplate));
-                pages_->addWidget(DexBinderPages::buildRepoInventoryPage(state, workerId, project, detailLens, binderTemplate));
-                pages_->addWidget(DexBinderPages::buildRepoMapPage(state, workerId, project, detailLens));
-                pages_->addWidget(DexBinderPages::buildRepoAuthorityPage(state, workerId, project, detailLens));
-                pages_->addWidget(DexBinderPages::buildRepoContractsPage(state, workerId, project, detailLens));
-                pages_->addWidget(DexBinderPages::buildRepoActivityPage(state, workerId, project, detailLens));
-                pages_->addWidget(DexBinderPages::buildRepoQualityPage(state, workerId, project, detailLens, binderTemplate));
-                pages_->addWidget(DexBinderPages::buildRepoEvidencePage(state, workerId, project, detailLens));
+            for (const QString &tab : tabs) {
+                pages_->addWidget(DexBinderPages::buildRepoBlankPage(state, tab, detailLens));
             }
         } else {
             pages_->addWidget(DexBinderPages::buildProfilePage(state, workerId, detailLens));
@@ -114,7 +101,9 @@ public:
         std::function<void(DexProjects::ProjectRegistry, QString)> onSave,
         std::function<void()> onRevert,
         std::function<void()> onBack,
-        std::function<void(DexProjects::ProjectRegistry, QString)> onSaveAndBack) {
+        std::function<void(DexProjects::ProjectRegistry, QString)> onSaveAndBack,
+        std::function<void(DraftsmanShell::ShellLayout)> onSaveShellLayout,
+        std::function<void(DraftsmanShell::ShellLayout)> onSaveShellLayoutAndBack) {
         clearLayout(tabLayout_);
         currentTabs_.clear();
         while (pages_->count() > 0) {
@@ -129,13 +118,23 @@ public:
         registry.error = state.projectRegistryError;
         registry.projects = state.registryProjects;
         registry.workers = state.registryWorkers;
-        pages_->addWidget(new ProjectRegistrySpecPage(
+        auto *settingsTabs = new QTabWidget;
+        settingsTabs->addTab(new ShellLayoutSettingsPage(
+            state.shellLayout,
+            std::move(onSaveShellLayout),
+            onRevert,
+            onBack,
+            std::move(onSaveShellLayoutAndBack)),
+            "Shell Layout");
+        settingsTabs->addTab(new ProjectRegistrySpecPage(
             registry,
             selectedProjectId,
             std::move(onSave),
             std::move(onRevert),
             std::move(onBack),
-            std::move(onSaveAndBack)));
+            std::move(onSaveAndBack)),
+            "Project Registry");
+        pages_->addWidget(settingsTabs);
         pages_->setCurrentIndex(0);
         currentTab_ = "Settings";
     }

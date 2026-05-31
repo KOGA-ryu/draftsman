@@ -4,6 +4,7 @@
 #include "repo_binder_template.h"
 #include "repo_proof_receipt_state.h"
 #include "repo_promotion_report_state.h"
+#include "shell_layout.h"
 
 #include <algorithm>
 
@@ -42,6 +43,10 @@ void DraftsmanWindow::loadProjectRegistryIntoState() {
 
 void DraftsmanWindow::loadBinderTemplatesIntoState() {
     state_.binderTemplateStore = DexRepoBinderTemplate::loadBinderTemplateStore(binderTemplateDirPath_);
+}
+
+void DraftsmanWindow::loadShellLayoutIntoState() {
+    state_.shellLayout = DraftsmanShell::loadShellLayoutFile(shellLayoutPath_);
 }
 
 void DraftsmanWindow::loadProofReceiptIntoState() {

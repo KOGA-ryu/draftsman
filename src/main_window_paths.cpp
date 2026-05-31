@@ -26,6 +26,23 @@ QString DraftsmanWindow::resolveProjectRegistryPath(const QString &requestedPath
     return QDir(QCoreApplication::applicationDirPath()).filePath("../data/projects.json");
 }
 
+QString DraftsmanWindow::resolveShellLayoutPath() {
+    const QStringList starts = {QDir::currentPath(), QCoreApplication::applicationDirPath()};
+    for (const QString &start : starts) {
+        QDir dir(start);
+        for (int depth = 0; depth < 8; ++depth) {
+            const QString candidate = dir.filePath("data/shell_layout.json");
+            if (QFileInfo::exists(candidate)) {
+                return QFileInfo(candidate).absoluteFilePath();
+            }
+            if (!dir.cdUp()) {
+                break;
+            }
+        }
+    }
+    return QDir(QCoreApplication::applicationDirPath()).filePath("../data/shell_layout.json");
+}
+
 QString DraftsmanWindow::resolveProofReceiptPath(const QString &requestedPath) {
     if (!requestedPath.isEmpty()) {
         return QFileInfo(requestedPath).absoluteFilePath();

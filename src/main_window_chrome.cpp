@@ -21,9 +21,9 @@ void DraftsmanWindow::buildToolbar() {
     toolbar->setIconSize(QSize(16, 16));
     addToolBar(Qt::TopToolBarArea, toolbar);
 
-    auto *appLabel = new QLabel("Draftsman");
-    appLabel->setObjectName("chromeTitle");
-    toolbar->addWidget(appLabel);
+    appTitleLabel_ = new QLabel("Draftsman");
+    appTitleLabel_->setObjectName("chromeTitle");
+    toolbar->addWidget(appTitleLabel_);
 
     chromeLocationLabel_ = new QLabel;
     chromeLocationLabel_->setObjectName("chromeLocation");

@@ -80,6 +80,8 @@ add_executable(draftsman
     src/rust_cockpit_backend_paths.cpp
     src/rust_cockpit_backend_process.cpp
     src/sheet_stack_body.cpp
+    src/shell_layout.cpp
+    src/shell_layout_settings_page.cpp
     src/ui_style_base_chrome.cpp
     src/ui_style_buttons.cpp
     src/ui_style_reports.cpp
@@ -104,6 +106,7 @@ add_executable(draftsman_smoke
     src/repo_binder_template.cpp
     src/repo_binder_template_default.cpp
     src/repo_binder_template_store.cpp
+    src/shell_layout.cpp
     tests/state_backend_smoke.cpp
 )
 

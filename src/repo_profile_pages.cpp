@@ -11,6 +11,7 @@
 #include "render_helpers.h"
 #include "repo_binder_page_helpers.h"
 #include "repo_cleanup_queue_state.h"
+#include "shell_layout.h"
 
 namespace DexBinderPages {
 namespace {
@@ -145,13 +146,16 @@ QWidget *buildRepoBlankPage(
     const CockpitState &state,
     const QString &topTab,
     const QString &detailLens) {
-    Q_UNUSED(state);
-    return buildCompactPage([topTab, detailLens](QVBoxLayout *layout) {
-        addBlankShellPanel(layout, topTab + " / " + detailLens, 96, true);
-        addBlankShellPanel(layout, "primary panel", 132);
-        addBlankShellPanel(layout, "review panel", 112, true);
-        addBlankShellPanel(layout, "artifact panel", 112);
-        addBlankShellPanel(layout, "notes panel", 88, true);
+    return buildCompactPage([state, topTab, detailLens](QVBoxLayout *layout) {
+        const QVector<DraftsmanShell::ShellPanel> panels =
+            DraftsmanShell::enabledPanelsForTab(state.shellLayout, topTab);
+        if (panels.isEmpty()) {
+            addBlankShellPanel(layout, topTab + " / " + detailLens, 96, true);
+            return;
+        }
+        for (const DraftsmanShell::ShellPanel &panel : panels) {
+            addBlankShellPanel(layout, panel.label, panel.minHeight, panel.subtle);
+        }
     });
 }
 
