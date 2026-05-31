@@ -1,5 +1,6 @@
 #include "main_window.h"
 
+#include "feature_registry.h"
 #include "project_registry.h"
 #include "repo_binder_template.h"
 #include "repo_proof_receipt_state.h"
@@ -59,6 +60,10 @@ void DraftsmanWindow::loadUiThemeIntoState() {
     dex_ui::set_active_theme(state_.uiTheme);
     qApp->setFont(dex_ui::app_font());
     qApp->setStyleSheet(appStyleSheet());
+}
+
+void DraftsmanWindow::loadFeatureRegistryIntoState() {
+    state_.featureRegistry = DexFeatures::loadFeatureRegistryFile(featureRegistryPath_);
 }
 
 void DraftsmanWindow::loadProofReceiptIntoState() {

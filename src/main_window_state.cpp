@@ -23,6 +23,7 @@ void DraftsmanWindow::reloadState() {
     loadProjectRegistryIntoState();
     loadShellLayoutIntoState();
     loadUiThemeIntoState();
+    loadFeatureRegistryIntoState();
     loadBinderTemplatesIntoState();
     loadProofReceiptIntoState();
     loadPromotionReportIntoState();
@@ -161,6 +162,12 @@ void DraftsmanWindow::refreshViews() {
             },
             [this](dex_ui::UiTheme theme) {
                 saveUiThemeFromSettings(std::move(theme), true);
+            },
+            [this](DexFeatures::FeatureRegistry registry) {
+                saveFeatureRegistryFromSettings(std::move(registry), false);
+            },
+            [this](DexFeatures::FeatureRegistry registry) {
+                saveFeatureRegistryFromSettings(std::move(registry), true);
             });
         rightContext_->setSettingsState(state_, selectedProjectId_);
     } else {

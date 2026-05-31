@@ -5,6 +5,7 @@
 
 #include "app_state_records.h"
 #include "binder_state.h"
+#include "feature_registry.h"
 #include "project_registry.h"
 #include "repo_binder_template.h"
 #include "repo_contract_check_state.h"
@@ -45,4 +46,5 @@ struct CockpitState {
     DexRepoPromotionReport::RepoPromotionReportState repoPromotionReport;
     DraftsmanShell::ShellLayout shellLayout = DraftsmanShell::defaultShellLayout();
     dex_ui::UiTheme uiTheme = dex_ui::defaultUiTheme();
+    DexFeatures::FeatureRegistry featureRegistry = DexFeatures::defaultFeatureRegistry();
 };

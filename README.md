@@ -31,9 +31,14 @@ The low-light palette and font controls live in `data/ui_theme.json`:
 `ui_font_size`, and `code_font_size`. The app derives the rest of the UI
 network from those values.
 
+Feature catalog entries and their enabled state live in `data/features.json`.
+The shipped text editor workbench entry is disabled until a renderer work order
+lands.
+
 ```sh
 python3 scripts/validate_shell_layout.py data/shell_layout.json
 python3 scripts/validate_ui_theme.py data/ui_theme.json
+python3 scripts/validate_features.py data/features.json
 ```
 
 Agent-facing editing notes live in:
@@ -46,6 +51,7 @@ docs/AGENT_EDITING.md
 docs/examples/repo_knowledge_shell_layout.json
 docs/schemas/shell_layout.schema.json
 docs/schemas/ui_theme.schema.json
+docs/schemas/features.schema.json
 ```
 
 ## Build

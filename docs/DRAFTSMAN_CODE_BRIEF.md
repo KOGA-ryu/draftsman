@@ -20,7 +20,7 @@ Draftsman is a C++/Qt 6 project-binder shell. The app should stay reusable: proj
 - `data/shell_layout.json`: blank shell tabs, panels, inspector panels, and review lines.
 - `data/projects.json`: project and worker registry.
 - `data/ui_theme.json`: theme mode, colors, UI font, code font, and font sizes.
-- Future: `data/features.json` should hold feature catalog entries and project enablement.
+- `data/features.json`: feature catalog entries, renderer metadata, settings, and enabled state.
 
 ## Builder Rules
 
@@ -39,6 +39,7 @@ Run these before sign-off when code or config changes:
 ```sh
 python3 scripts/validate_shell_layout.py data/shell_layout.json
 python3 scripts/validate_ui_theme.py data/ui_theme.json
+python3 scripts/validate_features.py data/features.json
 cmake --build build
 ctest --test-dir build --output-on-failure
 ```

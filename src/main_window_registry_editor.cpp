@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QToolButton>
 
+#include "feature_registry.h"
 #include "project_registry.h"
 #include "shell_layout.h"
 #include "ui_theme.h"
@@ -59,6 +60,20 @@ void DraftsmanWindow::saveUiThemeFromSettings(dex_ui::UiTheme theme, bool exitAf
     QString error;
     if (!dex_ui::saveUiThemeFile(theme, &error)) {
         QMessageBox::warning(this, "UI Theme", error);
+        return;
+    }
+    settingsMode_ = !exitAfterSave;
+    repoMode_ = true;
+    reloadState();
+}
+
+void DraftsmanWindow::saveFeatureRegistryFromSettings(DexFeatures::FeatureRegistry registry, bool exitAfterSave) {
+    if (registry.sourcePath.isEmpty()) {
+        registry.sourcePath = featureRegistryPath_;
+    }
+    QString error;
+    if (!DexFeatures::saveFeatureRegistryFile(registry, &error)) {
+        QMessageBox::warning(this, "Feature Registry", error);
         return;
     }
     settingsMode_ = !exitAfterSave;

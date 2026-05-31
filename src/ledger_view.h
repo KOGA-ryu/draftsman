@@ -18,6 +18,7 @@
 #include "app_state.h"
 #include "app_state_helpers.h"
 #include "binder_navigation.h"
+#include "feature_settings_page.h"
 #include "render_helpers.h"
 #include "repo_binder_template.h"
 #include "repo_binder_pages.h"
@@ -106,7 +107,9 @@ public:
         std::function<void(DraftsmanShell::ShellLayout)> onSaveShellLayout,
         std::function<void(DraftsmanShell::ShellLayout)> onSaveShellLayoutAndBack,
         std::function<void(dex_ui::UiTheme)> onSaveTheme,
-        std::function<void(dex_ui::UiTheme)> onSaveThemeAndBack) {
+        std::function<void(dex_ui::UiTheme)> onSaveThemeAndBack,
+        std::function<void(DexFeatures::FeatureRegistry)> onSaveFeatures,
+        std::function<void(DexFeatures::FeatureRegistry)> onSaveFeaturesAndBack) {
         clearLayout(tabLayout_);
         currentTabs_.clear();
         while (pages_->count() > 0) {
@@ -144,6 +147,13 @@ public:
             onBack,
             std::move(onSaveThemeAndBack)),
             "Theme");
+        settingsTabs->addTab(new FeatureSettingsPage(
+            state.featureRegistry,
+            std::move(onSaveFeatures),
+            onRevert,
+            onBack,
+            std::move(onSaveFeaturesAndBack)),
+            "Features");
         pages_->addWidget(settingsTabs);
         pages_->setCurrentIndex(0);
         currentTab_ = "Settings";

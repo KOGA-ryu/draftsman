@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "features": [
+    {
+      "feature_id": "text_editor_workbench",
+      "label": "Text Editor",
+      "status": "planned",
+      "renderer_type": "text_editor_workbench",
+      "enabled": false,
+      "target_surfaces": [
+        "center",
+        "right_context"
+      ],
+      "settings": {
+        "target_tabs": [
+          "Artifacts",
+          "Research",
+          "Reviews"
+        ],
+        "show_right_context": true,
+        "default_document_name": "scratch.txt",
+        "default_language": "text",
+        "enable_command_palette": true,
+        "enable_fixture_runner": false,
+        "enable_clipboard_write": false,
+        "max_preview_chars": 12000
+      }
+    }
+  ]
+}

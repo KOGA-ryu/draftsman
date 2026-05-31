@@ -8,6 +8,7 @@
 
 #include "binder_state.h"
 #include "app_state_helpers.h"
+#include "feature_registry.h"
 #include "project_registry.h"
 #include "project_registry_spec_model.h"
 #include "repo_binder_template.h"
@@ -177,6 +178,75 @@ private slots:
         QVERIFY(serialized.contains("code_font"));
         QVERIFY(serialized.contains("ui_font_size"));
         QVERIFY(serialized.contains("code_font_size"));
+    }
+
+    void productionFeatureRegistryHasDisabledTextEditorWorkbench() {
+        const QString path = QString::fromUtf8(DRAFTSMAN_SOURCE_DIR) + "/data/features.json";
+        const DexFeatures::FeatureRegistry registry = DexFeatures::loadFeatureRegistryFile(path);
+
+        QVERIFY2(registry.loaded, qPrintable(registry.error));
+        QCOMPARE(registry.schemaVersion, 1);
+        const DexFeatures::FeatureRecord *feature =
+            DexFeatures::findFeatureById(registry, "text_editor_workbench");
+        QVERIFY(feature != nullptr);
+        QCOMPARE(feature->label, QString("Text Editor"));
+        QCOMPARE(feature->status, QString("planned"));
+        QCOMPARE(feature->rendererType, QString("text_editor_workbench"));
+        QVERIFY(!feature->enabled);
+        QCOMPARE(feature->settings.value("default_document_name").toString(), QString("scratch.txt"));
+        QCOMPARE(feature->settings.value("enable_clipboard_write").toBool(true), false);
+    }
+
+    void featureRegistryParserIgnoresUnknownFields() {
+        const QJsonDocument document(QJsonObject{
+            {"schema_version", 1},
+            {"unknown_future_field", "ignored"},
+            {"features", QJsonArray{QJsonObject{
+                {"feature_id", "sample_feature"},
+                {"label", "Sample Feature"},
+                {"status", "planned"},
+                {"renderer_type", "sample_renderer"},
+                {"enabled", false},
+                {"unknown_feature_field", "ignored"},
+                {"settings", QJsonObject{{"max_preview_chars", 42}}},
+            }}},
+        });
+
+        const DexFeatures::FeatureRegistry registry =
+            DexFeatures::parseFeatureRegistryDocument(document);
+
+        QVERIFY(registry.loaded);
+        QCOMPARE(registry.features.size(), 1);
+        QCOMPARE(registry.features.first().featureId, QString("sample_feature"));
+        QVERIFY(!registry.features.first().enabled);
+        QCOMPARE(registry.features.first().settings.value("max_preview_chars").toInt(), 42);
+    }
+
+    void featureRegistrySavePersistsEnabledState() {
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+
+        DexFeatures::FeatureRegistry registry;
+        registry.loaded = true;
+        registry.sourcePath = dir.filePath("features.json");
+        DexFeatures::FeatureRecord feature;
+        feature.featureId = "text_editor_workbench";
+        feature.label = "Text Editor";
+        feature.status = "planned";
+        feature.rendererType = "text_editor_workbench";
+        feature.enabled = true;
+        registry.features.push_back(feature);
+
+        QString error;
+        QVERIFY2(DexFeatures::saveFeatureRegistryFile(registry, &error), qPrintable(error));
+        const DexFeatures::FeatureRegistry loaded =
+            DexFeatures::loadFeatureRegistryFile(registry.sourcePath);
+
+        QVERIFY2(loaded.loaded, qPrintable(loaded.error));
+        const DexFeatures::FeatureRecord *loadedFeature =
+            DexFeatures::findFeatureById(loaded, "text_editor_workbench");
+        QVERIFY(loadedFeature != nullptr);
+        QVERIFY(loadedFeature->enabled);
     }
 
     void shellLayoutParsesAgentEditableLines() {

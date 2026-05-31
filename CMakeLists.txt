@@ -26,6 +26,9 @@ add_executable(draftsman
     src/binder_stats_state.cpp
     src/binder_stats_widgets.cpp
     src/detail_lens_rail.cpp
+    src/feature_registry_parse.cpp
+    src/feature_registry_store.cpp
+    src/feature_settings_page.cpp
     src/main.cpp
     src/main_window_chrome.cpp
     src/main_window.cpp
@@ -101,6 +104,8 @@ target_link_libraries(draftsman PRIVATE Qt6::Widgets)
 add_executable(draftsman_smoke
     src/binder_record_state.cpp
     src/binder_stats_state.cpp
+    src/feature_registry_parse.cpp
+    src/feature_registry_store.cpp
     src/project_registry_lookup.cpp
     src/project_registry_parse.cpp
     src/project_registry_spec_model.cpp

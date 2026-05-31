@@ -60,6 +60,23 @@ QString DraftsmanWindow::resolveUiThemePath() {
     return QDir(QCoreApplication::applicationDirPath()).filePath("../data/ui_theme.json");
 }
 
+QString DraftsmanWindow::resolveFeatureRegistryPath() {
+    const QStringList starts = {QDir::currentPath(), QCoreApplication::applicationDirPath()};
+    for (const QString &start : starts) {
+        QDir dir(start);
+        for (int depth = 0; depth < 8; ++depth) {
+            const QString candidate = dir.filePath("data/features.json");
+            if (QFileInfo::exists(candidate)) {
+                return QFileInfo(candidate).absoluteFilePath();
+            }
+            if (!dir.cdUp()) {
+                break;
+            }
+        }
+    }
+    return QDir(QCoreApplication::applicationDirPath()).filePath("../data/features.json");
+}
+
 QString DraftsmanWindow::resolveProofReceiptPath(const QString &requestedPath) {
     if (!requestedPath.isEmpty()) {
         return QFileInfo(requestedPath).absoluteFilePath();
