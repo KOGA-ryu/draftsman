@@ -39,6 +39,9 @@ python3 scripts/validate_ui_theme.py data/ui_theme.json
 Agent-facing editing notes live in:
 
 ```text
+docs/DRAFTSMAN_CODE_BRIEF.md
+docs/BUILDER_SIGNOFF.md
+docs/workflows/DEX_WORKER_PROTOCOL.md
 docs/AGENT_EDITING.md
 docs/examples/repo_knowledge_shell_layout.json
 docs/schemas/shell_layout.schema.json
